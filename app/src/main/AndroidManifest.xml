@@ -24,6 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".activity.FriendsMomentActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ComposeWechat.NoActionBar"/>
     </application>
 
 </manifest>

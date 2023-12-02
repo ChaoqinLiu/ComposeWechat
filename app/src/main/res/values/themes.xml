@@ -2,4 +2,9 @@
 <resources>
 
     <style name="Theme.ComposeWechat" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.ComposeWechat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

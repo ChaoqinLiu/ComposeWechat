@@ -1,5 +1,6 @@
 package com.lcq.composewechat.ui.page
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import com.lcq.composewechat.data.ActionTitleItem
 import com.lcq.composewechat.view.ActionTitle
 import com.lcq.composewechat.view.OnActionClickListener
 import com.lcq.composewechat.R
+import com.lcq.composewechat.activity.FriendsMomentActivity
 
 /**
  * author: liuchaoqin
@@ -49,7 +51,7 @@ fun FindPage(innerPadding: PaddingValues) {
                 ), context, false,
                     object : OnActionClickListener {
                         override fun onClick() {
-
+                            FriendsMomentActivity.navigate(context)
                         }
                     })
                 CQDivider(thickness = 10.dp, colorId =  R.color.nav_bg)
