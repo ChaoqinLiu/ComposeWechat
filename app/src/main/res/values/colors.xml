@@ -11,4 +11,6 @@
     <color name="green">#57BE6A</color>
     <color name="gray">#888888</color>
     <color name="gray_10">#CCCCCC</color>
+    <color name="nav_bg">#EDEDED</color>
+    <color name="black_10">#2E2E2E</color>
 </resources>

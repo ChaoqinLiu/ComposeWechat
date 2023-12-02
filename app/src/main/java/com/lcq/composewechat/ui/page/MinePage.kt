@@ -2,6 +2,7 @@ package com.lcq.composewechat.ui.page
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,29 +26,19 @@ import com.lcq.composewechat.CQDivider
  * 创建时间：2023/12/1
  * Describe ：
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MinePage() {
+fun MinePage(innerPadding: PaddingValues) {
     val context = LocalContext.current
     rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
     val scrollState = rememberLazyListState()
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text("",)
-                },
-            )
-        },
-        content = { innerPadding ->
-            LazyColumn(
-                contentPadding = innerPadding,
-                state = scrollState
-            ) {
-                item {
-                    Text(text = "我的")
-                }
+    Surface {
+        LazyColumn(
+            contentPadding = innerPadding,
+            state = scrollState
+        ) {
+            item {
+                CQDivider()
             }
         }
-    )
+    }
 }

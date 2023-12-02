@@ -5,18 +5,24 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircleOutline
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.R
 import com.lcq.composewechat.data.navList
+import com.lcq.composewechat.data.titles
 
 /**
  * author: liuchaoqin
@@ -36,6 +42,50 @@ fun HomePage() {
             .background(MaterialTheme.colorScheme.background)
     ) {
         Scaffold(
+            topBar = {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            titles[selectIndex],
+                            maxLines = 1,
+                            fontSize = 16.sp,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    },
+                    actions = {
+                        if(selectIndex != 3) {
+                            IconButton(
+                                onClick = {
+                                    /* doSomething() */
+                                }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Search,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(30.dp),
+                                    tint = Color(ContextCompat.getColor(context, R.color.black_10))
+                                )
+                            }
+                            IconButton(onClick = {
+                                /* doSomething() */
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Filled.AddCircleOutline,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(25.dp),
+                                    tint = Color(ContextCompat.getColor(context, R.color.black_10))
+                                )
+                            }
+                        }
+                    },
+                    colors = TopAppBarDefaults.mediumTopAppBarColors(
+                        containerColor = Color(ContextCompat.getColor(context, if (selectIndex != 3) R.color.nav_bg else R.color.white)),
+                        scrolledContainerColor = Color(ContextCompat.getColor(context, if (selectIndex != 3) R.color.nav_bg else R.color.white)),
+                        navigationIconContentColor = Color.White,
+                        titleContentColor = Color(ContextCompat.getColor(context, R.color.black_10)),
+                        actionIconContentColor = Color(ContextCompat.getColor(context, R.color.black_10)),
+                    )
+                )
+            },
             bottomBar = {
                 NavigationBar(
                     modifier = Modifier.height(60.dp)
@@ -46,6 +96,7 @@ fun HomePage() {
                             modifier = Modifier
                                 .weight(1f)
                                 .height(60.dp)
+                                .background(Color(ContextCompat.getColor(context, R.color.nav_bg)))
                                 .clickable {
                                     selectIndex = index
                                 }
@@ -74,14 +125,17 @@ fun HomePage() {
                         }
                     }
                 }
+            },
+            content = { innerPadding ->
+                Box {
+                    when(selectIndex){
+                        0 -> MessagePage(innerPadding)
+                        1 -> AddrBookPage(innerPadding)
+                        2 -> FindPage(innerPadding)
+                        3 -> MinePage(innerPadding)
+                    }
+                }
             }
-        ) {
-            when(selectIndex){
-                0 -> MessagePage()
-                1 -> AddrBookPage()
-                2 -> FindPage()
-                3 -> MinePage()
-            }
-        }
+        )
     }
 }
