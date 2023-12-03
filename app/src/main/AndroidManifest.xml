@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ComposeWechat"
         tools:targetApi="31">
+
         <activity
             android:name=".activity.MainActivity"
             android:exported="true"
@@ -24,11 +25,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.FriendsMomentActivity"
             android:exported="false"
-            android:theme="@style/Theme.ComposeWechat.NoActionBar"/>
+            android:theme="@style/Theme.ComposeWechat.NoActionBar" />
+
+        <activity
+            android:name=".activity.ImageBrowserActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ComposeWechat.NoActionBar" />
     </application>
 
 </manifest>

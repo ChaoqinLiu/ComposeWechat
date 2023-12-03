@@ -11,6 +11,11 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import com.lcq.composewechat.ui.page.montent.FriendsMomentPage
 import com.lcq.composewechat.ui.theme.ComposeWechatTheme
 
+/**
+ * author: liuchaoqin
+ * 创建时间：2023/12/2
+ * Describe ：朋友圈
+ */
 class FriendsMomentActivity : AppCompatActivity() {
 
     companion object {

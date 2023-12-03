@@ -15,6 +15,12 @@ data class MomentItem(
     val comment: String? = null,
 )
 
+data class ImageItem(
+    val url: String,
+)
+
+val myAvatar: String = "https://img2.baidu.com/it/u=1457726272,410649157&fm=253&fmt=auto&app=138&f=JPEG?w=190&h=190"
+
 val momentList = listOf(
     MomentItem(
         "https://img.duoziwang.com/2019/07/12080849900677.jpg",
