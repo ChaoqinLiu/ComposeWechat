@@ -1,4 +1,4 @@
-package com.lcq.composewechat.ui.page
+package com.lcq.composewechat.ui.page.home
 
 import android.content.Intent
 import androidx.compose.foundation.background

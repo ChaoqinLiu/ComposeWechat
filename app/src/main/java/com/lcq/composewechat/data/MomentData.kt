@@ -19,7 +19,7 @@ data class ImageItem(
     val url: String,
 )
 
-val myAvatar: String = "https://img2.baidu.com/it/u=1457726272,410649157&fm=253&fmt=auto&app=138&f=JPEG?w=190&h=190"
+val myAvatar: String = "https://img1.baidu.com/it/u=1735809830,2895031338&fm=253&fmt=auto&app=138&f=JPEG?w=200&h=200"
 
 val momentList = listOf(
     MomentItem(

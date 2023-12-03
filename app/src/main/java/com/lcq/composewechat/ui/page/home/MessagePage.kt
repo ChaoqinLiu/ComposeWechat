@@ -1,4 +1,4 @@
-package com.lcq.composewechat.ui.page
+package com.lcq.composewechat.ui.page.home
 
 import android.annotation.SuppressLint
 import android.content.Context

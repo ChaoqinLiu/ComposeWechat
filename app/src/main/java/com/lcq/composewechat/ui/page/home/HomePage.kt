@@ -1,11 +1,9 @@
-package com.lcq.composewechat.ui.page
+package com.lcq.composewechat.ui.page.home
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.Search
@@ -88,15 +86,15 @@ fun HomePage() {
             },
             bottomBar = {
                 NavigationBar(
-                    modifier = Modifier.height(60.dp)
+                    modifier = Modifier.height(60.dp),
+                    containerColor = Color(ContextCompat.getColor(context, if (selectIndex > 1) R.color.white else R.color.nav_bg)),
                 ) {
                     navList.forEachIndexed { index, nav ->
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
                                 .weight(1f)
-                                .height(60.dp)
-                                .background(Color(ContextCompat.getColor(context, R.color.nav_bg)))
+                                .fillMaxHeight()
                                 .clickable {
                                     selectIndex = index
                                 }

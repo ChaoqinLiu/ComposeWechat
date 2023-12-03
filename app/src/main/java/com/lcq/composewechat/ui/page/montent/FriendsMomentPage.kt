@@ -309,24 +309,6 @@ fun MomentTopItem() {
             }
         }
     }
-//    Box(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .height(300.dp)
-//    ) {
-//        Image(
-//            painter = rememberCoilPainter(request = "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202005%2F17%2F20200517115233_ZMzvN.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1704099655&t=1de9e0c8fa0062c3a405316a7bd66009"),
-//            contentDescription = null,
-//            contentScale = ContentScale.Crop,
-//            modifier = Modifier.fillMaxSize()
-//        )
-//        Column(
-//            modifier = Modifier
-//                .fillMaxSize()
-//        ) {
-//            Spacer(modifier = Modifier.statusBarsHeight())
-//        }
-//    }
 }
 
 @Composable

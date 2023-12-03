@@ -1,7 +1,6 @@
-package com.lcq.composewechat.ui.page
+package com.lcq.composewechat.ui.page.home
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -22,7 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -31,14 +28,11 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.CQDivider
 import com.lcq.composewechat.R
 import com.lcq.composewechat.data.AddrBookItem
-import com.lcq.composewechat.data.MessageItem
-import com.lcq.composewechat.data.contactsList
 import com.lcq.composewechat.data.headList
 import com.lcq.composewechat.ui.book.StickyHeaderState
 import com.lcq.composewechat.utils.book.AddrBookUtils
 import com.lcq.composewechat.view.ActionBook
 import kotlinx.coroutines.launch
-import net.sourceforge.pinyin4j.PinyinHelper
 
 /**
  * author: liuchaoqin
