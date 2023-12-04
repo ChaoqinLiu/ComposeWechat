@@ -1,4 +1,4 @@
-package com.lcq.composewechat.ui.page.image
+package com.lcq.composewechat.ui.screen.image
 
 import android.app.Activity
 import androidx.compose.foundation.Image
@@ -26,7 +26,7 @@ import kotlin.math.absoluteValue
  */
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ImageBrowserPage(images: ArrayList<String>, currentIndex: Int) {
+fun ImageBrowserScreen(images: ArrayList<String>, currentIndex: Int) {
 
     /**
      * 界面状态变更

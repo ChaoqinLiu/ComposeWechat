@@ -1,4 +1,4 @@
-package com.lcq.composewechat.ui.page.home
+package com.lcq.composewechat.ui.screen.home
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -33,10 +33,9 @@ import com.lcq.composewechat.CQDivider
  * 创建时间：2023/12/1
  * Describe ：
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MessagePage(innerPadding: PaddingValues) {
+fun ChatSessionScreen(innerPadding: PaddingValues) {
     val context = LocalContext.current
     rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
     val scrollState = rememberLazyListState()

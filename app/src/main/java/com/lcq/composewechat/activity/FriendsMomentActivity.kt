@@ -8,7 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.core.view.WindowCompat
 import com.google.accompanist.insets.ProvideWindowInsets
-import com.lcq.composewechat.ui.page.montent.FriendsMomentPage
+import com.lcq.composewechat.ui.screen.montent.FriendsMomentScreen
 import com.lcq.composewechat.ui.theme.ComposeWechatTheme
 
 /**
@@ -36,9 +36,7 @@ class FriendsMomentActivity : AppCompatActivity() {
 
 @Composable
 fun MomentPage() {
-    ComposeWechatTheme {
-        ProvideWindowInsets {
-            FriendsMomentPage()
-        }
+    ProvideWindowInsets {
+        FriendsMomentScreen()
     }
 }

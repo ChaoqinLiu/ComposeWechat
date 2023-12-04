@@ -1,4 +1,4 @@
-package com.lcq.composewechat.ui.page.home
+package com.lcq.composewechat.ui.screen.home
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -30,7 +30,7 @@ import com.lcq.composewechat.data.titles
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomePage() {
+fun HomeScreen() {
     var selectIndex by remember { mutableStateOf(0) }
     val context = LocalContext.current
     rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
@@ -127,10 +127,10 @@ fun HomePage() {
             content = { innerPadding ->
                 Box {
                     when(selectIndex){
-                        0 -> MessagePage(innerPadding)
-                        1 -> AddrBookPage(innerPadding)
-                        2 -> FindPage(innerPadding)
-                        3 -> MinePage(innerPadding)
+                        0 -> ChatSessionScreen(innerPadding)
+                        1 -> AddrBookScreen(innerPadding)
+                        2 -> FindScreen(innerPadding)
+                        3 -> MineScreen(innerPadding)
                     }
                 }
             }

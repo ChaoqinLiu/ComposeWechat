@@ -1,4 +1,4 @@
-package com.lcq.composewechat.ui.page.home
+package com.lcq.composewechat.ui.screen.home
 
 import android.content.Context
 import androidx.compose.foundation.Image
@@ -39,7 +39,7 @@ import com.lcq.composewechat.view.OnActionClickListener
  * Describe ：
  */
 @Composable
-fun MinePage(innerPadding: PaddingValues) {
+fun MineScreen(innerPadding: PaddingValues) {
     val context = LocalContext.current
     rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
     val scrollState = rememberLazyListState()

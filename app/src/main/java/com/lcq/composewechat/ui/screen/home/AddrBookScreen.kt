@@ -1,4 +1,4 @@
-package com.lcq.composewechat.ui.page.home
+package com.lcq.composewechat.ui.screen.home
 
 import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
  * Describe ：
  */
 @Composable
-fun AddrBookPage(innerPadding: PaddingValues) {
+fun AddrBookScreen(innerPadding: PaddingValues) {
     val context = LocalContext.current
     val data = AddrBookUtils.getContactMap()
     val stickyHeaderState = rememberStickyHeaderState()

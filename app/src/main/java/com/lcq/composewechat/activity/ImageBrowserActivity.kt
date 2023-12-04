@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
-import com.lcq.composewechat.ui.page.image.ImageBrowserPage
+import com.lcq.composewechat.ui.screen.image.ImageBrowserScreen
 
 /**
  * author: liuchaoqin
@@ -20,7 +20,7 @@ class ImageBrowserActivity : AppCompatActivity() {
         val images: ArrayList<String> = intent.getStringArrayListExtra("images") as ArrayList<String>
         val currentIndex = intent.getIntExtra("currentIndex", 0)
         setContent {
-            ImageBrowserPage(images = images, currentIndex = currentIndex)
+            ImageBrowserScreen(images = images, currentIndex = currentIndex)
         }
     }
 

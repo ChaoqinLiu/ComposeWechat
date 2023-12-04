@@ -1,6 +1,5 @@
-package com.lcq.composewechat.ui.page.home
+package com.lcq.composewechat.ui.screen.home
 
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,7 +27,7 @@ import com.lcq.composewechat.activity.FriendsMomentActivity
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FindPage(innerPadding: PaddingValues) {
+fun FindScreen(innerPadding: PaddingValues) {
     val context = LocalContext.current
     rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
     val scrollState = rememberLazyListState()

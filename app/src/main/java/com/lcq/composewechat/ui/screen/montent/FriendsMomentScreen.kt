@@ -1,4 +1,4 @@
-package com.lcq.composewechat.ui.page.montent
+package com.lcq.composewechat.ui.screen.montent
 
 import android.content.Context
 import androidx.compose.foundation.Image
@@ -38,10 +38,10 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.insets.statusBarsHeight
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.activity.ImageBrowserActivity
 import com.lcq.composewechat.data.MomentItem
 import com.lcq.composewechat.data.myAvatar
-import com.lcq.composewechat.ui.page.image.ImageBrowserPage
 import com.lcq.composewechat.viewmodel.FriendsMomentViewModel
 
 /**
@@ -51,12 +51,15 @@ import com.lcq.composewechat.viewmodel.FriendsMomentViewModel
  */
 
 @Composable
-fun FriendsMomentPage(viewModel: FriendsMomentViewModel = FriendsMomentViewModel()) {
+fun FriendsMomentScreen(viewModel: FriendsMomentViewModel = FriendsMomentViewModel()) {
     val lazyMomentItems = viewModel.rankMomentItems.collectAsLazyPagingItems()
+    rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
     val scrollState = rememberLazyListState()
     val context = LocalContext.current
     Box {
-        LazyColumn(state = scrollState) {
+        LazyColumn(
+            state = scrollState,
+        ) {
             item {
                 MomentTopItem()
             }

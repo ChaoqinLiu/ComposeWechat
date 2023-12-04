@@ -29,11 +29,14 @@
             android:name=".activity.FriendsMomentActivity"
             android:exported="false"
             android:theme="@style/Theme.ComposeWechat.NoActionBar" />
-
         <activity
             android:name=".activity.ImageBrowserActivity"
             android:exported="false"
             android:theme="@style/Theme.ComposeWechat.NoActionBar" />
+        <activity
+            android:name=".activity.ChatActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ComposeWechat.NoActionBar"/>
     </application>
 
 </manifest>

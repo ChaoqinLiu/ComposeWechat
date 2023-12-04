@@ -9,8 +9,8 @@ import androidx.compose.runtime.remember
 import androidx.core.view.WindowCompat
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.lcq.composewechat.enums.LifeState
-import com.lcq.composewechat.ui.page.home.HomePage
-import com.lcq.composewechat.ui.page.SplashPage
+import com.lcq.composewechat.ui.screen.home.HomeScreen
+import com.lcq.composewechat.ui.screen.SplashScreen
 import com.lcq.composewechat.ui.theme.ComposeWechatTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,17 +25,15 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ComposeHomeUI() {
-    ComposeWechatTheme {
-        ProvideWindowInsets {
-            val (appState, setAppState) = remember { mutableStateOf(LifeState.Splash) }
+    ProvideWindowInsets {
+        val (appState, setAppState) = remember { mutableStateOf(LifeState.Splash) }
 
-            when (appState) {
-                LifeState.Splash -> {
-                    SplashPage { setAppState(LifeState.Home) }
-                }
-                LifeState.Home -> {
-                    HomePage()
-                }
+        when (appState) {
+            LifeState.Splash -> {
+                SplashScreen { setAppState(LifeState.Home) }
+            }
+            LifeState.Home -> {
+                HomeScreen()
             }
         }
     }
