@@ -1,9 +1,11 @@
 package com.lcq.composewechat.activity
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import com.lcq.composewechat.ui.screen.ChatScreen
+import com.lcq.composewechat.ui.screen.chat.ChatScreen
 
 /**
  * author: liuchaoqin
@@ -16,6 +18,13 @@ class ChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ChatScreen()
+        }
+    }
+
+    companion object {
+        fun navigate(context: Context) {
+            val intent = Intent(context, ChatActivity::class.java)
+            context.startActivity(intent)
         }
     }
 }

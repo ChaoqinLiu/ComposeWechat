@@ -1,5 +1,6 @@
 package com.lcq.composewechat.ui.screen.montent
 
+import android.app.Activity
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,6 +43,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.activity.ImageBrowserActivity
 import com.lcq.composewechat.data.MomentItem
 import com.lcq.composewechat.data.myAvatar
+import com.lcq.composewechat.ui.screen.Loading
 import com.lcq.composewechat.viewmodel.FriendsMomentViewModel
 
 /**
@@ -83,34 +85,7 @@ fun FriendsMomentScreen(viewModel: FriendsMomentViewModel = FriendsMomentViewMod
         MomentHeader(scrollState)
     }
 }
-@Composable
-fun Loading() {
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .height(30.dp)
-        .wrapContentWidth(Alignment.CenterHorizontally)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxHeight(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            CircularProgressIndicator(
-                color = Color(0xFFCCCCCC),
-                modifier = Modifier
-                    .height(18.dp)
-                    .width(18.dp),
-                strokeWidth = 1.5.dp
-            )
-            Text(
-                text = "正在加载...",
-                fontSize = 13.sp,
-                color = Color(0xFF888888),
-                modifier = Modifier.padding(start = 8.dp)
-            )
-        }
-    }
-}
+
 @Composable
 fun MomentItemView(it: MomentItem, context: Context) {
     Box(modifier = Modifier
@@ -325,7 +300,8 @@ fun MomentHeader(scrollState: LazyListState) {
         firstVisibleItemScrollOffset.value / target
     }
     val backgroundColor = Color(0xFFEDEDED)
-    Column() {
+    val activity = LocalContext.current as Activity
+    Column {
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
@@ -353,7 +329,10 @@ fun MomentHeader(scrollState: LazyListState) {
                         contentDescription = null,
                         modifier = Modifier
                             .size(20.dp)
-                            .align(Alignment.CenterStart),
+                            .align(Alignment.CenterStart)
+                            .clickable {
+                                activity.finish()
+                            },
                         tint = if (scrollPercent > 0) Color(0xff2E2E2E) else Color.White
                     )
                 }

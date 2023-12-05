@@ -3,6 +3,7 @@ package com.lcq.composewechat.ui.screen.home
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,6 +28,7 @@ import com.lcq.composewechat.R
 import com.lcq.composewechat.data.MessageItem
 import com.lcq.composewechat.data.messageList
 import com.lcq.composewechat.CQDivider
+import com.lcq.composewechat.activity.ChatActivity
 
 /**
  * author: liuchaoqin
@@ -103,6 +105,9 @@ fun MessageItem(it: MessageItem, context: Context) {
             .fillMaxWidth()
             .padding(15.dp, 0.dp, 15.dp, 0.dp)
             .height(70.dp)
+            .clickable {
+                ChatActivity.navigate(context)
+            }
     ) {
         Row(
             modifier = Modifier
