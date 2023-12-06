@@ -71,9 +71,7 @@ private fun LazyColumRightUI(data: Map<String, MutableList<AddrBookItem>>,contex
                         .clip(RoundedCornerShape(10.dp))
                         .clickable {
                             scope.launch {
-                                scope.launch {
-                                    stickyState.scrollToItem(initial)
-                                }
+                                stickyState.scrollToItem(initial)
                             }
                         },
                     color = Color(ContextCompat.getColor(context, R.color.black_10)),

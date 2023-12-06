@@ -22,7 +22,7 @@ class ChatMessageSource: PagingSource<Int, ChatSession>() {
             val nextPage = params.key ?: 1
             val chatListResponse = chatList
             if (nextPage > 1) {
-                delay(2000)
+                delay(1000)
             }
             LoadResult.Page(
                 data = chatListResponse,

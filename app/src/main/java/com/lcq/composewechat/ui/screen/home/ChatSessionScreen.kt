@@ -106,7 +106,7 @@ fun MessageItem(it: MessageItem, context: Context) {
             .padding(15.dp, 0.dp, 15.dp, 0.dp)
             .height(70.dp)
             .clickable {
-                ChatActivity.navigate(context)
+                ChatActivity.navigate(context, it)
             }
     ) {
         Row(

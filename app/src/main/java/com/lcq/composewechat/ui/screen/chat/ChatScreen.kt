@@ -2,11 +2,14 @@ package com.lcq.composewechat.ui.screen.chat
 
 import android.app.Activity
 import android.content.Context
+import android.view.View
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -14,11 +17,18 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,7 +44,9 @@ import com.lcq.composewechat.data.myAvatar
 import com.lcq.composewechat.enums.ChatAlign
 import com.lcq.composewechat.models.ChatSession
 import com.lcq.composewechat.ui.screen.Loading
+import com.lcq.composewechat.utils.book.autoCloseKeyboard
 import com.lcq.composewechat.viewmodel.ChatViewModel
+import kotlinx.coroutines.launch
 
 /**
  * author: liuchaoqin
@@ -44,23 +56,29 @@ import com.lcq.composewechat.viewmodel.ChatViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatScreen(viewModel: ChatViewModel = ChatViewModel()) {
+fun ChatScreen(viewModel: ChatViewModel = ChatViewModel(), session: ChatSession) {
     val context = LocalContext.current as Activity
     val scrollState = rememberLazyListState()
-    var inputText by remember {mutableStateOf("")}
+    var inputText by remember { mutableStateOf("") }
+    // 历史消息
     val lazyChatItems = viewModel.rankChatItems.collectAsLazyPagingItems()
+    // 新的消息
+    val messageState by viewModel.mMessageFlow.collectAsState()
+    val scope = rememberCoroutineScope()
+
     rememberSystemUiController().setStatusBarColor(Color(ContextCompat.getColor(context, R.color.nav_bg)), darkIcons = true)
     Surface(
         Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .autoCloseKeyboard()
     ) {
         Scaffold(
             topBar = {
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
-                            "小美",
+                            session.name,
                             maxLines = 1,
                             fontSize = 16.sp,
                             overflow = TextOverflow.Ellipsis,
@@ -119,7 +137,8 @@ fun ChatScreen(viewModel: ChatViewModel = ChatViewModel()) {
                                 modifier = Modifier
                                     .fillMaxHeight()
                                     .weight(1f),
-                                contentAlignment = Alignment.Center) {
+                                contentAlignment = Alignment.Center
+                            ) {
                                 Icon(
                                     imageVector = Icons.Filled.BlurCircular,
                                     contentDescription = null,
@@ -129,9 +148,10 @@ fun ChatScreen(viewModel: ChatViewModel = ChatViewModel()) {
                             }
                             Box(
                                 modifier = Modifier
-                                    .padding(10.dp)
+                                    .padding(6.dp)
                                     .fillMaxHeight()
-                                    .weight(6f)) {
+                                    .weight(6f)
+                            ) {
                                 OutlinedTextField(
                                     value = inputText,
                                     onValueChange = {
@@ -143,34 +163,72 @@ fun ChatScreen(viewModel: ChatViewModel = ChatViewModel()) {
                                         focusedBorderColor = Color.White,
                                         unfocusedBorderColor = Color.White
                                     ),
-                                    modifier = Modifier.padding(0.dp)
+                                    textStyle = TextStyle(
+                                        fontSize = 14.sp
+                                    ),
+                                    modifier = Modifier
+                                        .padding(0.dp)
+                                        .defaultMinSize(minHeight = 45.dp, minWidth = 280.dp)
                                 )
                             }
-                            Box(
-                                modifier = Modifier
+                            if (inputText == "") {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .weight(1f),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.TagFaces,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(30.dp),
+                                        tint = Color(0xff000000)
+                                    )
+                                }
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .weight(1f),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.AddCircleOutline,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(30.dp),
+                                        tint = Color(0xff000000)
+                                    )
+                                }
+                            } else {
+                                Box(modifier = Modifier
+                                    .padding(
+                                        start = 10.dp,
+                                        top = 12.dp,
+                                        bottom = 12.dp,
+                                        end = 10.dp
+                                    )
                                     .fillMaxHeight()
-                                    .weight(1f),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.TagFaces,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(30.dp),
-                                    tint = Color(0xff000000)
-                                )
-                            }
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxHeight()
-                                    .weight(1f),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.AddCircleOutline,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(30.dp),
-                                    tint = Color(0xff000000)
-                                )
+                                    .weight(2f),
+                                    contentAlignment = Alignment.Center ) {
+                                    Text(
+                                        text = "发送",
+                                        fontSize = 15.sp,
+                                        color = Color.White,
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .clip(RoundedCornerShape(8.dp))
+                                            .background(Color(0xff5ECC71))
+                                            .padding(top = 4.dp)
+                                            .clickable {
+                                                viewModel.sendMessage(inputText)
+                                                inputText = ""
+                                                // 发送信息后滚动到最底部
+                                                scope.launch {
+                                                    scrollState.scrollToItem(0)
+                                                }
+                                            },
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
                             }
                         }
                     }
@@ -190,9 +248,13 @@ fun ChatScreen(viewModel: ChatViewModel = ChatViewModel()) {
                         reverseLayout = true,
                         verticalArrangement = Arrangement.Top,
                     ) {
+                        items(messageState) {
+                            MessageItemView(it, session)
+                        }
+
                         items(lazyChatItems) {
                             it?.let {
-                                MessageItemView(it, context)
+                                MessageItemView(it, session)
                             }
                         }
 
@@ -211,12 +273,12 @@ fun ChatScreen(viewModel: ChatViewModel = ChatViewModel()) {
 }
 
 @Composable
-fun MessageItemView(it: ChatSession, context: Context) {
+fun MessageItemView(it: ChatSession, session: ChatSession) {
     Box(
         contentAlignment = if (it.chatAlign == ChatAlign.START) Alignment.CenterStart else Alignment.CenterEnd,
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight(Alignment.CenterVertically)
+            .wrapContentHeight()
             .padding(
                 top = 30.dp,
                 start = if (it.chatAlign == ChatAlign.START) 0.dp else 40.dp,
@@ -225,8 +287,11 @@ fun MessageItemView(it: ChatSession, context: Context) {
     ) {
         Row(modifier = Modifier
             .wrapContentWidth()
-            .wrapContentHeight(Alignment.CenterVertically)
+            .wrapContentHeight()
         ) {
+            /**
+             * 他人头像（左边）
+             */
             if(it.chatAlign == ChatAlign.START) {
                 Box(
                     modifier = Modifier
@@ -248,16 +313,47 @@ fun MessageItemView(it: ChatSession, context: Context) {
             Box(
                 modifier = Modifier
                     .weight(6f)
-                    .wrapContentHeight(Alignment.CenterVertically),
-                contentAlignment = if (it.chatAlign == ChatAlign.START) Alignment.CenterStart else Alignment.CenterEnd
+                    .wrapContentHeight(),
+                contentAlignment =
+                    if (it.chatAlign == ChatAlign.START) Alignment.TopStart
+                    else Alignment.TopEnd
             ) {
+                /**
+                 * 尖角
+                 */
                 Box(
                     modifier = Modifier
-                        .padding(start = 8.dp, end = 8.dp)
+                        .fillMaxWidth()
+                        .padding(top = 10.dp),
+                    contentAlignment = if (it.chatAlign == ChatAlign.START) Alignment.TopStart else Alignment.TopEnd
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.PlayArrow,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(20.dp)
+                            .rotate(if (it.chatAlign == ChatAlign.END) 0f else 180f),
+                        tint = if (it.chatAlign == ChatAlign.START) Color.White
+                        else Color(0xffA9EA7A)
+                    )
+                }
+                /**
+                 * 文本内容
+                 */
+                Box(
+                    modifier = Modifier
+                        .padding(
+                            start = if (it.chatAlign == ChatAlign.START) 12.dp else 0.dp,
+                            end = if (it.chatAlign == ChatAlign.START) 0.dp else 12.dp,
+                        )
                         .clip(RoundedCornerShape(4.dp))
                         .wrapContentWidth()
                         .wrapContentHeight(Alignment.CenterVertically)
-                        .background(if(it.chatAlign == ChatAlign.START) Color.White else Color(0xffB1E980))
+                        .background(
+                            if (it.chatAlign == ChatAlign.START) Color.White else Color(
+                                0xffA9EA7A
+                            )
+                        ),
                 ) {
                     Text(
                         modifier = Modifier.padding(8.dp),
@@ -266,6 +362,9 @@ fun MessageItemView(it: ChatSession, context: Context) {
                     )
                 }
             }
+            /**
+             * 本人头像（右边）
+             */
             if(it.chatAlign == ChatAlign.END) {
                 Box(
                     modifier = Modifier
@@ -275,7 +374,7 @@ fun MessageItemView(it: ChatSession, context: Context) {
                         .weight(1f)
                 ) {
                     Image(
-                        painter = rememberCoilPainter(request = myAvatar),
+                        painter = rememberCoilPainter(request = session.avatar),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
