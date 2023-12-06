@@ -44,3 +44,32 @@ fun Loading() {
         }
     }
 }
+
+@Composable
+fun ProgressLoading() {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .height(60.dp)
+        .wrapContentWidth(Alignment.CenterHorizontally)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxHeight(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            CircularProgressIndicator(
+                color = Color(0xFF888888),
+                modifier = Modifier
+                    .height(40.dp)
+                    .width(40.dp),
+                strokeWidth = 1.5.dp
+            )
+            Text(
+                text = "正在登陆...",
+                fontSize = 16.sp,
+                color = Color(0xFF888888),
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+    }
+}
