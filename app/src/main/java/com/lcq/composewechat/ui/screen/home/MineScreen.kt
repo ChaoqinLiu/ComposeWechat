@@ -31,7 +31,6 @@ import com.lcq.composewechat.R
 import com.lcq.composewechat.data.ActionTitleItem
 import com.lcq.composewechat.data.myAvatar
 import com.lcq.composewechat.view.ActionTitle
-import com.lcq.composewechat.view.OnActionClickListener
 
 /**
  * author: liuchaoqin
@@ -61,11 +60,7 @@ fun MineScreen(innerPadding: PaddingValues) {
                     "服务",
                     R.mipmap.icon_service,
                 ), context, false,
-                    object : OnActionClickListener {
-                        override fun onClick() {
-
-                        }
-                    })
+                    onClick = {})
                 CQDivider(thickness = 10.dp, colorId =  R.color.nav_bg)
             }
 
@@ -74,44 +69,28 @@ fun MineScreen(innerPadding: PaddingValues) {
                     "收藏",
                     R.mipmap.icon_shoucang,
                 ), context, true,
-                    object : OnActionClickListener {
-                        override fun onClick() {
-
-                        }
-                    })
+                    onClick = {})
             }
             item {
                 ActionTitle(ActionTitleItem(
                     "朋友圈",
                     R.mipmap.icon_pengyouquan,
                 ), context, true,
-                    object : OnActionClickListener {
-                        override fun onClick() {
-
-                        }
-                    })
+                    onClick = {})
             }
             item {
                 ActionTitle(ActionTitleItem(
                     "卡包",
                     R.mipmap.icon_card,
                 ), context, true,
-                    object : OnActionClickListener {
-                        override fun onClick() {
-
-                        }
-                    })
+                    onClick = {})
             }
             item {
                 ActionTitle(ActionTitleItem(
                     "表情",
                     R.mipmap.icon_biaoqing,
                 ), context, false,
-                    object : OnActionClickListener {
-                        override fun onClick() {
-
-                        }
-                    })
+                    onClick = {})
                 CQDivider(thickness = 10.dp, colorId =  R.color.nav_bg)
             }
             item {
@@ -119,11 +98,7 @@ fun MineScreen(innerPadding: PaddingValues) {
                     "设置",
                     R.mipmap.icon_set,
                 ), context, false,
-                    object : OnActionClickListener {
-                        override fun onClick() {
-
-                        }
-                    })
+                    onClick = {})
             }
 
         }

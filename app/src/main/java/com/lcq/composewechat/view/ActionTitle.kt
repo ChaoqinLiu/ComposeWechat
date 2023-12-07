@@ -33,19 +33,21 @@ import com.lcq.composewechat.data.HeaderItem
  * 创建时间：2023/12/2
  * Describe ：
  */
-interface OnActionClickListener {
-    fun onClick()
-}
 
 @Composable
-fun ActionTitle(it: ActionTitleItem, context: Context, showLine: Boolean, onClickListener: OnActionClickListener) {
+fun ActionTitle(
+    it: ActionTitleItem,
+    context: Context,
+    showLine: Boolean,
+    onClick: () -> Unit
+) {
     Box(
         modifier = Modifier
             .background(Color.White)
             .fillMaxWidth()
             .padding(15.dp, 0.dp, 15.dp, 0.dp)
             .height(50.dp)
-            .clickable { onClickListener.onClick() }
+            .clickable { onClick() }
     ) {
         Row(
             modifier = Modifier

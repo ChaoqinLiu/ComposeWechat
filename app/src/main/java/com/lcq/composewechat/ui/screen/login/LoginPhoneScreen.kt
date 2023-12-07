@@ -1,4 +1,4 @@
-package com.lcq.composewechat.ui.screen
+package com.lcq.composewechat.ui.screen.login
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.CQDivider
 import com.lcq.composewechat.activity.MainActivity
+import com.lcq.composewechat.ui.screen.ProgressLoading
 import com.lcq.composewechat.utils.book.autoCloseKeyboard
 import com.lcq.composewechat.utils.book.toast
 import kotlinx.coroutines.delay
@@ -32,15 +32,15 @@ import kotlinx.coroutines.launch
 
 /**
  * author: liuchaoqin
- * 创建时间：2023/12/6
- * Describe ：
+ * 创建时间：2023/12/7
+ * Describe ：手机号登陆
  */
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
-fun LoginScreen() {
+fun LoginPhoneScreen() {
     val context = LocalContext.current as Activity
     rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
     var phoneText by remember { mutableStateOf("+8618200000000") }

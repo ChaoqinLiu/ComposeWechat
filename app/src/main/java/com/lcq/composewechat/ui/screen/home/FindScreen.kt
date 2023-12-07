@@ -16,16 +16,13 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.CQDivider
 import com.lcq.composewechat.data.ActionTitleItem
 import com.lcq.composewechat.view.ActionTitle
-import com.lcq.composewechat.view.OnActionClickListener
 import com.lcq.composewechat.R
-import com.lcq.composewechat.activity.FriendsMomentActivity
 
 /**
  * author: liuchaoqin
  * 创建时间：2023/12/1
  * Describe ：
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FindScreen(innerPadding: PaddingValues) {
     val context = LocalContext.current
@@ -48,11 +45,7 @@ fun FindScreen(innerPadding: PaddingValues) {
                     R.mipmap.icon_friends,
                     "https://img.duoziwang.com/2019/07/12080849900677.jpg"
                 ), context, false,
-                    object : OnActionClickListener {
-                        override fun onClick() {
-                            FriendsMomentActivity.navigate(context)
-                        }
-                    })
+                    onClick = {})
                 CQDivider(thickness = 10.dp, colorId =  R.color.nav_bg)
             }
             item {
@@ -60,11 +53,7 @@ fun FindScreen(innerPadding: PaddingValues) {
                     "直播",
                     R.mipmap.icon_live,
                 ), context, false,
-                    object : OnActionClickListener {
-                        override fun onClick() {
-
-                        }
-                    })
+                    onClick = {})
                 CQDivider(thickness = 10.dp, colorId =  R.color.nav_bg)
             }
             item {
@@ -72,22 +61,14 @@ fun FindScreen(innerPadding: PaddingValues) {
                     "扫一扫",
                     R.mipmap.icon_scan,
                 ), context, true,
-                    object : OnActionClickListener {
-                        override fun onClick() {
-
-                        }
-                    })
+                    onClick = {})
             }
             item {
                 ActionTitle(ActionTitleItem(
                     "摇一摇",
                     R.mipmap.icon_yao,
                 ), context, true,
-                    object : OnActionClickListener {
-                        override fun onClick() {
-
-                        }
-                    })
+                    onClick = {})
                 CQDivider(thickness = 10.dp, colorId =  R.color.nav_bg)
             }
             item {
@@ -95,22 +76,14 @@ fun FindScreen(innerPadding: PaddingValues) {
                     "看一看",
                     R.mipmap.icon_look,
                 ), context, true,
-                    object : OnActionClickListener {
-                        override fun onClick() {
-
-                        }
-                    })
+                    onClick = {})
             }
             item {
                 ActionTitle(ActionTitleItem(
                     "搜一搜",
                     R.mipmap.icon_search,
                 ), context, true,
-                    object : OnActionClickListener {
-                        override fun onClick() {
-
-                        }
-                    })
+                    onClick = {})
                 CQDivider(thickness = 10.dp, colorId =  R.color.nav_bg)
             }
             item {
@@ -118,11 +91,7 @@ fun FindScreen(innerPadding: PaddingValues) {
                     "附近",
                     R.mipmap.icon_near,
                 ), context, false,
-                    object : OnActionClickListener {
-                        override fun onClick() {
-
-                        }
-                    })
+                    onClick = {})
                 CQDivider(thickness = 10.dp, colorId =  R.color.nav_bg)
             }
             item {
@@ -130,11 +99,7 @@ fun FindScreen(innerPadding: PaddingValues) {
                     "小程序",
                     R.mipmap.icon_applet,
                 ), context, false,
-                    object : OnActionClickListener {
-                        override fun onClick() {
-
-                        }
-                    })
+                    onClick = {})
             }
         }
     }

@@ -9,9 +9,8 @@ import androidx.compose.runtime.remember
 import androidx.core.view.WindowCompat
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.lcq.composewechat.enums.LifeState
-import com.lcq.composewechat.ui.screen.LoginScreen
+import com.lcq.composewechat.ui.screen.login.LoginScreen
 import com.lcq.composewechat.ui.screen.SplashScreen
-import com.lcq.composewechat.ui.screen.home.HomeScreen
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
