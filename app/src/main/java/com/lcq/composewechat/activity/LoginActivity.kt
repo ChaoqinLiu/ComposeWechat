@@ -23,7 +23,7 @@ class LoginActivity : AppCompatActivity() {
 }
 
 @Composable
-fun ComposeLoginUI() {
+private fun ComposeLoginUI() {
     ProvideWindowInsets {
         val (appState, setAppState) = remember { mutableStateOf(LifeState.Splash) }
 

@@ -35,6 +35,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.CQDivider
 import com.lcq.composewechat.R
 import com.lcq.composewechat.activity.MainActivity
+import com.lcq.composewechat.activity.OtherLoginActivity
 import com.lcq.composewechat.data.myAvatar
 import com.lcq.composewechat.ui.screen.ModalBottomSheetDialog
 import com.lcq.composewechat.ui.screen.ProcessDialogComponent
@@ -157,7 +158,7 @@ fun LoginScreen() {
                                     },
                                     placeholder = {
                                         Text(
-                                            text = if (isPwdAuth) "请填写微信密码" else "请填写密码",
+                                            text = if (isPwdAuth) "请填写微信密码" else "请填写验证码",
                                             fontSize = 16.sp,
                                             color = Color(0xff888888),
                                         )
@@ -336,6 +337,10 @@ fun LoginScreen() {
                     modalBottomSheetState = modalBottomSheetState,
                     onSelect = {index, title ->
                         Log.d("LoginScreen", "index====$index  title=====$title")
+                        // 登陆其他帐号
+                        if (index == 0) {
+                            OtherLoginActivity.navigate(context)
+                        }
                     }
                 )
             }

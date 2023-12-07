@@ -25,8 +25,17 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.OtherLoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ComposeWechat.NoActionBar" />
+        <activity
+            android:name=".activity.PhoneLoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ComposeWechat.NoActionBar" />
+        <activity
             android:name=".activity.MainActivity"
             android:exported="false"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.ComposeWechat.NoActionBar" />
         <activity
             android:name=".activity.FriendsMomentActivity"

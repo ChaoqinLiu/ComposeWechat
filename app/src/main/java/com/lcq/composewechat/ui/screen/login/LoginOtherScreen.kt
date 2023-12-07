@@ -14,7 +14,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -24,10 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.CQDivider
-import com.lcq.composewechat.R
 import com.lcq.composewechat.activity.MainActivity
+import com.lcq.composewechat.activity.PhoneLoginActivity
 import com.lcq.composewechat.ui.screen.ProcessDialogComponent
-import com.lcq.composewechat.ui.screen.ProgressLoading
 import com.lcq.composewechat.utils.book.autoCloseKeyboard
 import com.lcq.composewechat.utils.book.toast
 import kotlinx.coroutines.delay
@@ -42,14 +40,14 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginPhoneScreen(phone: String) {
+@Preview
+fun LoginOtherScreen() {
     val context = LocalContext.current as Activity
     rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
-    var phoneText by remember { mutableStateOf("+86$phone") }
-    var pwdText by remember { mutableStateOf("") }
+    var isPhone by remember { mutableStateOf(true) }
+    var phoneText by remember { mutableStateOf("")}
+    var pwdOrPhoneText by remember { mutableStateOf("") }
     val loading = remember { mutableStateOf(false) }
-    var isPwdAuth by remember { mutableStateOf(true) }
-    var isFocus by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     Surface(
         Modifier
@@ -82,7 +80,7 @@ fun LoginPhoneScreen(phone: String) {
                          * 导航栏到title的间距
                          */
                         item {
-                            Spacer(modifier = Modifier.height(40.dp))
+                            Spacer(modifier = Modifier.height(20.dp))
                         }
                         /**
                          * 手机号登陆title
@@ -95,7 +93,7 @@ fun LoginPhoneScreen(phone: String) {
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = "手机号登陆",
+                                    text = if (isPhone) "手机号登陆" else "微信号/QQ号/邮箱登陆",
                                     fontSize = 20.sp
                                 )
                             }
@@ -111,27 +109,34 @@ fun LoginPhoneScreen(phone: String) {
                                     .wrapContentHeight(),
                             ) {
                                 TextField(
-                                    readOnly = true,
+                                    readOnly = isPhone,
                                     value = phoneText,
                                     onValueChange = {
                                         phoneText = it
                                     },
                                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                                        containerColor = Color.Transparent,
-                                        focusedBorderColor = Color.Transparent,
-                                        unfocusedBorderColor = Color.Transparent,
+                                        containerColor = Color.White,
+                                        focusedBorderColor = Color.White,
+                                        unfocusedBorderColor = Color.White,
                                     ),
                                     textStyle = TextStyle(
                                         fontSize = 16.sp
                                     ),
                                     leadingIcon = {
                                         Text(
-                                            text = "手机号",
+                                            text = if (isPhone) "国家/地区" else "帐号",
                                             fontSize = 18.sp,
-                                            modifier = Modifier.width(90.dp)
+                                            modifier = Modifier.width(if (isPhone) 120.dp else 90.dp)
                                         )
                                     },
                                     modifier = Modifier.fillMaxWidth(),
+                                    placeholder = {
+                                        Text(
+                                            text = if (!isPhone) "请填写微信号/QQ号/..." else "中国大陆（+86)",
+                                            fontSize = 16.sp,
+                                            color = Color(0xff888888),
+                                        )
+                                    }
                                 )}
                         }
                         /**
@@ -139,7 +144,7 @@ fun LoginPhoneScreen(phone: String) {
                          */
                         item {
                             Box(modifier = Modifier.padding(start = 15.dp, end = 15.dp)) {
-                                CQDivider(thickness = 0.5.dp)
+                                CQDivider(thickness = 1.dp)
                             }
                         }
                         /**
@@ -153,35 +158,30 @@ fun LoginPhoneScreen(phone: String) {
                                     .wrapContentHeight(),
                             ) {
                                 TextField(
-                                    value = pwdText,
+                                    value = pwdOrPhoneText,
                                     onValueChange = {
-                                        pwdText = it
+                                        pwdOrPhoneText = it
                                     },
                                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                                        containerColor = Color.Transparent,
-                                        focusedBorderColor = Color.Transparent,
-                                        unfocusedBorderColor = Color.Transparent,
-                                        cursorColor = Color(0xff5ECC71)
+                                        containerColor = Color.White,
+                                        focusedBorderColor = Color.Green,
+                                        unfocusedBorderColor = Color(0xff888888),
+                                        cursorColor = Color.Green
                                     ),
                                     textStyle = TextStyle(
                                         fontSize = 16.sp
                                     ),
                                     leadingIcon = {
                                         Text(
-                                            text = if (isPwdAuth) "密码" else "验证码",
+                                            text = if (isPhone) "手机号" else "密码",
                                             fontSize = 18.sp,
-                                            modifier = Modifier.width(90.dp)
+                                            modifier = Modifier.width(if (isPhone) 120.dp else 90.dp)
                                         )
                                     },
-                                    modifier = Modifier.fillMaxWidth().onFocusChanged {
-                                        isFocus = when {
-                                            it.isFocused -> true
-                                            else -> false
-                                        }
-                                    },
+                                    modifier = Modifier.fillMaxWidth(),
                                     placeholder = {
                                         Text(
-                                            text = if (isPwdAuth) "请填写微信密码" else "请填写验证码",
+                                            text = if (isPhone)"请填写手机号" else "请填写密码",
                                             fontSize = 16.sp,
                                             color = Color(0xff888888),
                                         )
@@ -189,51 +189,16 @@ fun LoginPhoneScreen(phone: String) {
                                 )}
                         }
                         item {
-                            if (!isPwdAuth) {
-                                Box(
-                                    modifier = Modifier
-                                        .padding(start = 110.dp, end = 15.dp, bottom = 4.dp)
-                                        .fillMaxWidth(),
-                                    contentAlignment = Alignment.CenterStart
-                                ) {
-                                    Text(
-                                        text = "获取验证码",
-                                        fontSize = 16.sp,
-                                        modifier = Modifier
-                                            .wrapContentHeight()
-                                            .wrapContentWidth()
-                                            .clip(RoundedCornerShape(8.dp))
-                                            .background(Color(0xffE1E1E1))
-                                            .padding(
-                                                start = 10.dp,
-                                                top = 2.dp,
-                                                end = 10.dp,
-                                                bottom = 6.dp
-                                            )
-                                    )
-                                }
-                            }
-                        }
-                        item {
-                            Box(modifier = Modifier.padding(start = 15.dp, end = 15.dp)) {
-                                CQDivider(thickness = 1.dp, colorId = if (isFocus) R.color.green else  R.color.gray_10)
-                            }
-                        }
-                        item {
                             Text(
-                                text = if (isPwdAuth) "用短信验证码登陆" else "密码登陆",
-                                fontSize = 14.sp,
+                                text = if (!isPhone) "用手机号登陆" else "微信号/QQ号/邮箱登陆",
+                                fontSize = 16.sp,
                                 color = Color(0xff5F6594),
-                                modifier = Modifier
-                                    .padding(15.dp)
+                                modifier = Modifier.padding(15.dp)
                                     .clickable {
-                                        isPwdAuth = !isPwdAuth
+                                        isPhone = !isPhone
                                     }
                             )
                         }
-                        /**
-                         * 进度框
-                         */
                         item {
                             if (loading.value) {
                                 ProcessDialogComponent(
@@ -255,11 +220,24 @@ fun LoginPhoneScreen(phone: String) {
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
+                                    .wrapContentHeight()
+                                    .padding(bottom = 20.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = if (isPhone) "上述手机号仅用于验证登陆" else "上述微信号/QQ号/邮箱登陆仅用于验证登陆",
+                                    fontSize = 12.sp,
+                                    color = Color(0xff888888),
+                                )
+                            }
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
                                     .wrapContentHeight(),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = "登陆",
+                                    text = "同意并继续",
                                     fontSize = 16.sp,
                                     color = Color.White,
                                     modifier = Modifier
@@ -274,20 +252,24 @@ fun LoginPhoneScreen(phone: String) {
                                             end = 80.dp
                                         )
                                         .clickable {
-                                            if (pwdText == "") {
-                                                context.toast(if (isPwdAuth) "请输入密码" else "请输入验证码")
+                                            if (phoneText == "" && !isPhone) {
+                                                context.toast("请输入帐号")
                                                 return@clickable
                                             }
-                                            if (pwdText != "123456") {
-                                                context.toast(if (isPwdAuth) "密码不正确" else "验证码不正确")
+                                            if (pwdOrPhoneText == "") {
+                                                context.toast(if (isPhone) "请输入手机号" else "请输入密码")
                                                 return@clickable
                                             }
-                                            loading.value = true
-                                            scope.launch {
-                                                delay(2000)
-                                                loading.value = false
-                                                MainActivity.navigate(context)
-                                            }
+                                            if (isPhone) {
+                                                PhoneLoginActivity.navigate(context, pwdOrPhoneText)
+                                            } else {
+                                                loading.value = true
+                                                scope.launch {
+                                                    delay(2000)
+                                                    loading.value = false
+                                                    MainActivity.navigate(context)
+                                                    }
+                                                }
                                         },
                                     textAlign = TextAlign.Center
                                 )
