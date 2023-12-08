@@ -8,19 +8,18 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.core.view.WindowCompat
 import com.google.accompanist.insets.ProvideWindowInsets
-import com.lcq.composewechat.ui.screen.montent.FriendsMomentScreen
-import com.lcq.composewechat.ui.theme.ComposeWechatTheme
+import com.lcq.composewechat.ui.screen.montent.MomentNavScreen
 
 /**
  * author: liuchaoqin
  * 创建时间：2023/12/2
  * Describe ：朋友圈
  */
-class FriendsMomentActivity : AppCompatActivity() {
+class MomentActivity : AppCompatActivity() {
 
     companion object {
         fun navigate(context: Context) {
-            val intent = Intent(context, FriendsMomentActivity::class.java)
+            val intent = Intent(context, MomentActivity::class.java)
             context.startActivity(intent)
         }
     }
@@ -37,6 +36,6 @@ class FriendsMomentActivity : AppCompatActivity() {
 @Composable
 fun MomentPage() {
     ProvideWindowInsets {
-        FriendsMomentScreen()
+        MomentNavScreen()
     }
 }

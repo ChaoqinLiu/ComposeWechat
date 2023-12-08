@@ -6,17 +6,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.CQDivider
 import com.lcq.composewechat.data.ActionTitleItem
 import com.lcq.composewechat.view.ActionTitle
 import com.lcq.composewechat.R
+import com.lcq.composewechat.activity.MomentActivity
+import com.lcq.composewechat.ui.route.FRIENDS_MOMENT
+import com.lcq.composewechat.ui.route.HOME
+import kotlinx.coroutines.launch
 
 /**
  * author: liuchaoqin
@@ -24,8 +29,9 @@ import com.lcq.composewechat.R
  * Describe ：
  */
 @Composable
-fun FindScreen(innerPadding: PaddingValues) {
+fun FindScreen(innerPadding: PaddingValues, navController: NavHostController) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
     val scrollState = rememberLazyListState()
     Surface {
@@ -45,7 +51,9 @@ fun FindScreen(innerPadding: PaddingValues) {
                     R.mipmap.icon_friends,
                     "https://img.duoziwang.com/2019/07/12080849900677.jpg"
                 ), context, false,
-                    onClick = {})
+                    onClick = {
+                        MomentActivity.navigate(context)
+                    })
                 CQDivider(thickness = 10.dp, colorId =  R.color.nav_bg)
             }
             item {

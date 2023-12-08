@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,6 +18,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.R
 import com.lcq.composewechat.data.navList
@@ -30,8 +32,8 @@ import com.lcq.composewechat.data.titles
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
-    var selectIndex by remember { mutableStateOf(0) }
+fun HomeScreen(navController: NavHostController) {
+    var selectIndex by rememberSaveable { mutableStateOf(0) }
     val context = LocalContext.current
     rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
     Surface(
@@ -129,7 +131,7 @@ fun HomeScreen() {
                     when(selectIndex){
                         0 -> ChatSessionScreen(innerPadding)
                         1 -> AddrBookScreen(innerPadding)
-                        2 -> FindScreen(innerPadding)
+                        2 -> FindScreen(innerPadding, navController)
                         3 -> MineScreen(innerPadding)
                     }
                 }

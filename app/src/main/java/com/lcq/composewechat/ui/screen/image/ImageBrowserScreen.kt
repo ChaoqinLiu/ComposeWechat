@@ -1,6 +1,5 @@
 package com.lcq.composewechat.ui.screen.image
 
-import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
@@ -13,8 +12,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.pager.*
 import kotlin.math.absoluteValue
@@ -26,7 +25,7 @@ import kotlin.math.absoluteValue
  */
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ImageBrowserScreen(images: ArrayList<String>, currentIndex: Int) {
+fun ImageBrowserScreen(images: ArrayList<String>, currentIndex: Int, navController: NavHostController) {
 
     /**
      * 界面状态变更
@@ -40,8 +39,7 @@ fun ImageBrowserScreen(images: ArrayList<String>, currentIndex: Int) {
             contentPadding = PaddingValues(horizontal = 0.dp),
             modifier = Modifier.fillMaxSize()
         ) { page ->
-            println("ImageBrowserItem current page: $page")
-            ImageBrowserItem(images[page], page, this)
+            ImageItem(images[page], page, this, navController)
         }
 
         HorizontalPagerIndicator(
@@ -57,7 +55,7 @@ fun ImageBrowserScreen(images: ArrayList<String>, currentIndex: Int) {
 
         LaunchedEffect(pageState) {
             snapshotFlow { pageState }.collect { pageState ->
-                println("ImageBrowserItem LaunchedEffect pageState currentPageOffset: $pageState.currentPageOffset")
+                println("ImageBrowserItem LaunchedEffect pageState currentPageOffset: ${pageState.currentPageOffset}")
             }
         }
     }
@@ -65,14 +63,11 @@ fun ImageBrowserScreen(images: ArrayList<String>, currentIndex: Int) {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ImageBrowserItem(image: String, page: Int = 0, pagerScope: PagerScope) {
+fun ImageItem(image: String, page: Int = 0, pagerScope: PagerScope, navController: NavHostController) {
     /**
      * 缩放比例
      */
     var scale by remember { mutableStateOf(1f) }
-
-    val context = LocalContext.current as Activity
-
     /**
      * 偏移量
      */
@@ -82,14 +77,13 @@ fun ImageBrowserItem(image: String, page: Int = 0, pagerScope: PagerScope) {
      * 监听手势状态变换
      */
     val state =
-        rememberTransformableState(onTransformation = { zoomChange, panChange, rotationChange ->
+        rememberTransformableState(onTransformation = { zoomChange, _, _ ->
             scale = (zoomChange * scale).coerceAtLeast(1f)
             scale = if (scale > 5f) {
                 5f
             } else {
                 scale
             }
-            println("ImageBrowserItem detectTapGestures rememberTransformableState scale: $scale")
         })
 
     Surface(
@@ -115,12 +109,10 @@ fun ImageBrowserItem(image: String, page: Int = 0, pagerScope: PagerScope) {
                     if (pageOffset == 1.0f) {
                         scale = 1.0f
                     }
-                    println("ImageBrowserItem pagerScope calculateCurrentOffsetForPage pageOffset: $pageOffset")
                 }
                 .pointerInput(Unit) {
                     detectTapGestures(
                         onDoubleTap = {
-                            println("ImageBrowserItem detectTapGestures onDoubleTap offset: $it")
                             scale = if (scale <= 1f) {
                                 2f
                             } else {
@@ -129,7 +121,7 @@ fun ImageBrowserItem(image: String, page: Int = 0, pagerScope: PagerScope) {
                             offset = Offset.Zero
                         },
                         onTap = {
-                            context.finish()
+                            navController.popBackStack()
                         }
                     )
                 }

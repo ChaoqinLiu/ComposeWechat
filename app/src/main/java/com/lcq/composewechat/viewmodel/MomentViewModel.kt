@@ -8,7 +8,7 @@ import com.lcq.composewechat.data.MomentItem
 import com.lcq.composewechat.viewmodel.paged.FriendsMomentSource
 import kotlinx.coroutines.flow.Flow
 
-class FriendsMomentViewModel : ViewModel() {
+class MomentViewModel : ViewModel() {
     val rankMomentItems: Flow<PagingData<MomentItem>> =
         Pager(PagingConfig(pageSize = 10, prefetchDistance = 1)) {
             FriendsMomentSource()

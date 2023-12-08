@@ -21,6 +21,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.CQDivider
 import com.lcq.composewechat.R
@@ -40,7 +41,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginPhoneScreen(phone: String) {
+fun LoginPhoneScreen(navController: NavHostController, phone: String) {
     val context = LocalContext.current as Activity
     rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
     var phoneText by remember { mutableStateOf("+86$phone") }
@@ -62,7 +63,8 @@ fun LoginPhoneScreen(phone: String) {
                     navigationIcon = {
                         IconButton(
                             onClick = {
-                                context.finish()
+                                //返回上一页
+                                navController.popBackStack()
                             }) {
                             Icon(
                                 imageVector = Icons.Filled.Close,

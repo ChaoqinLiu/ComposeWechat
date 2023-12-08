@@ -18,13 +18,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.CQDivider
 import com.lcq.composewechat.activity.MainActivity
-import com.lcq.composewechat.activity.PhoneLoginActivity
+import com.lcq.composewechat.ui.route.LOGIN_PHONE
 import com.lcq.composewechat.ui.screen.ProcessDialogComponent
 import com.lcq.composewechat.utils.autoCloseKeyboard
 import com.lcq.composewechat.utils.toast
@@ -40,8 +40,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview
-fun LoginOtherScreen() {
+fun LoginOtherScreen(navController: NavHostController) {
     val context = LocalContext.current as Activity
     rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
     var isPhone by remember { mutableStateOf(true) }
@@ -62,7 +61,8 @@ fun LoginOtherScreen() {
                     navigationIcon = {
                         IconButton(
                             onClick = {
-                                context.finish()
+                                //返回上一页
+                                navController.popBackStack()
                             }) {
                             Icon(
                                 imageVector = Icons.Filled.Close,
@@ -261,7 +261,10 @@ fun LoginOtherScreen() {
                                                 return@clickable
                                             }
                                             if (isPhone) {
-                                                PhoneLoginActivity.navigate(context, pwdOrPhoneText)
+                                                // 导航到手机登陆页
+                                                navController.navigate(
+                                                    "$LOGIN_PHONE/$pwdOrPhoneText",
+                                                )
                                             } else {
                                                 loading.value = true
                                                 scope.launch {

@@ -29,13 +29,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.CQDivider
 import com.lcq.composewechat.R
 import com.lcq.composewechat.activity.MainActivity
-import com.lcq.composewechat.activity.OtherLoginActivity
 import com.lcq.composewechat.data.myAvatar
+import com.lcq.composewechat.ui.route.LOGIN_OTHER
 import com.lcq.composewechat.ui.screen.ModalBottomSheetDialog
 import com.lcq.composewechat.ui.screen.ProcessDialogComponent
 import com.lcq.composewechat.utils.autoCloseKeyboard
@@ -52,8 +53,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
-@Preview
-fun LoginScreen() {
+fun LoginScreen(navController: NavHostController) {
     val context = LocalContext.current as Activity
     rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
     var pwdText by remember { mutableStateOf("") }
@@ -336,9 +336,9 @@ fun LoginScreen() {
                     modalBottomSheetState = modalBottomSheetState,
                     onSelect = {index, title ->
                         Log.d("LoginScreen", "index====$index  title=====$title")
-                        // 登陆其他帐号
+                        // 导航到登陆其他帐号
                         if (index == 0) {
-                            OtherLoginActivity.navigate(context)
+                            navController.navigate(LOGIN_OTHER)
                         }
                     }
                 )

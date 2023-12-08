@@ -11,6 +11,7 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import com.lcq.composewechat.enums.LifeState
 import com.lcq.composewechat.ui.screen.login.LoginScreen
 import com.lcq.composewechat.ui.screen.SplashScreen
+import com.lcq.composewechat.ui.screen.login.LoginNavScreen
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +33,7 @@ private fun ComposeLoginUI() {
                 SplashScreen { setAppState(LifeState.Home) }
             }
             LifeState.Home -> {
-                LoginScreen()
+                LoginNavScreen()
             }
         }
     }

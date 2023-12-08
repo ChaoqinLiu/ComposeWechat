@@ -2,6 +2,7 @@ package com.lcq.composewechat.ui.screen.montent
 
 import android.app.Activity
 import android.content.Context
+import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,9 +19,8 @@ import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -34,17 +34,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.lcq.composewechat.activity.ImageBrowserActivity
 import com.lcq.composewechat.data.MomentItem
 import com.lcq.composewechat.data.myAvatar
+import com.lcq.composewechat.ui.route.IMAGE_BROWSER
 import com.lcq.composewechat.ui.screen.Loading
-import com.lcq.composewechat.viewmodel.FriendsMomentViewModel
+import com.lcq.composewechat.viewmodel.MomentViewModel
 
 /**
  * author: liuchaoqin
@@ -52,42 +53,64 @@ import com.lcq.composewechat.viewmodel.FriendsMomentViewModel
  * Describe ：朋友圈
  */
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FriendsMomentScreen(viewModel: FriendsMomentViewModel = FriendsMomentViewModel()) {
+fun MomentScreen(
+    viewModel: MomentViewModel = MomentViewModel(),
+    navController: NavHostController
+) {
     val lazyMomentItems = viewModel.rankMomentItems.collectAsLazyPagingItems()
     rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
     val scrollState = rememberLazyListState()
     val context = LocalContext.current
-    Box {
-        LazyColumn(
-            state = scrollState,
-        ) {
-            item {
-                MomentTopItem()
-            }
-            items(lazyMomentItems) {
-                it?.let {
-                    MomentItemView(it, context)
-                }
-            }
+    Scaffold(
+        content = { paddingValues ->
+            Box {
+                if (lazyMomentItems.itemCount == 0) Loading() else
+                LazyColumn(
+                    contentPadding = paddingValues,
+                    state = scrollState,
+                ) {
+                    item {
+                        MomentTopItem()
+                    }
+                    items(lazyMomentItems) {
+                        it?.let {
+                            MomentItemView(it, context, navController)
+                        }
+                    }
 
-            lazyMomentItems.apply {
-                when (loadState.append) {
-                    is LoadState.Loading -> {
-                        item { Loading() }
-                    } else -> {}
+                    lazyMomentItems.apply {
+                        when (loadState.append) {
+                            is LoadState.Loading -> {
+                                item {
+                                    Loading()
+                                }
+                            } else -> {
+                            }
+                        }
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
                 }
-            }
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
+                MomentHeader(scrollState, navController)
+
+                LaunchedEffect(scrollState) {
+                    snapshotFlow { scrollState }.collect { scrollState ->
+                        println("MomentItemView LaunchedEffect scrollState currentPageOffset: ${scrollState}")
+                    }
+                }
             }
         }
-        MomentHeader(scrollState)
-    }
+    )
 }
 
 @Composable
-fun MomentItemView(it: MomentItem, context: Context) {
+fun MomentScreenUI() {}
+
+@Composable
+fun MomentItemView(it: MomentItem, context: Context, navController: NavHostController) {
     Box(modifier = Modifier
         .fillMaxWidth()
         .padding(10.dp)
@@ -107,13 +130,13 @@ fun MomentItemView(it: MomentItem, context: Context) {
                         .clip(RoundedCornerShape(6.dp))
                 )
             }
-            MomentImageItemView(it, context)
+            MomentImageItemView(it, context, navController)
         }
     }
 }
 
 @Composable
-fun MomentImageItemView(it: MomentItem, context: Context) {
+fun MomentImageItemView(it: MomentItem, context: Context, navController: NavHostController) {
     val defaultHeight = 100.dp
     var height: Dp = defaultHeight
     val size = it.images.size
@@ -159,11 +182,17 @@ fun MomentImageItemView(it: MomentItem, context: Context) {
                                     it.images.forEachIndexed { _, s ->
                                         images.add(s)
                                     }
-                                    ImageBrowserActivity.navigate(
-                                        context = context,
-                                        images = images,
-                                        currentIndex = index
-                                    )
+                                    val bundle = Bundle().apply {
+                                        putStringArrayList("images", images)
+                                        putInt("currentIndex", index)
+                                    }
+                                    val destination = navController.graph.findNode(IMAGE_BROWSER)
+                                    if (destination != null) {
+                                        navController.navigate(
+                                            resId = destination.id,
+                                            args = bundle
+                                        )
+                                    }
                                 }
                         ) {
                             Image(
@@ -290,8 +319,9 @@ fun MomentTopItem() {
 }
 
 @Composable
-fun MomentHeader(scrollState: LazyListState) {
+fun MomentHeader(scrollState: LazyListState, navController: NavHostController) {
     val target = LocalDensity.current.run { 200.dp.toPx() }
+    val context = LocalContext.current as Activity
     val firstVisibleItemIndex = remember { derivedStateOf { scrollState.firstVisibleItemIndex } }
     val firstVisibleItemScrollOffset = remember { derivedStateOf { scrollState.firstVisibleItemScrollOffset } }
     val scrollPercent: Float = if (firstVisibleItemIndex.value > 0) {
@@ -300,7 +330,6 @@ fun MomentHeader(scrollState: LazyListState) {
         firstVisibleItemScrollOffset.value / target
     }
     val backgroundColor = Color(0xFFEDEDED)
-    val activity = LocalContext.current as Activity
     Column {
         Spacer(
             modifier = Modifier
@@ -331,7 +360,7 @@ fun MomentHeader(scrollState: LazyListState) {
                             .size(20.dp)
                             .align(Alignment.CenterStart)
                             .clickable {
-                                activity.finish()
+                                context.finish()
                             },
                         tint = if (scrollPercent > 0) Color(0xff2E2E2E) else Color.White
                     )
