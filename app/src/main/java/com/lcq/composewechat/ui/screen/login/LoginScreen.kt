@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material3.*
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -39,8 +38,8 @@ import com.lcq.composewechat.activity.OtherLoginActivity
 import com.lcq.composewechat.data.myAvatar
 import com.lcq.composewechat.ui.screen.ModalBottomSheetDialog
 import com.lcq.composewechat.ui.screen.ProcessDialogComponent
-import com.lcq.composewechat.utils.book.autoCloseKeyboard
-import com.lcq.composewechat.utils.book.toast
+import com.lcq.composewechat.utils.autoCloseKeyboard
+import com.lcq.composewechat.utils.toast
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

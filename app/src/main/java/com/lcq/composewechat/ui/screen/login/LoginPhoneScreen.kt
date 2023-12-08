@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -27,9 +26,8 @@ import com.lcq.composewechat.CQDivider
 import com.lcq.composewechat.R
 import com.lcq.composewechat.activity.MainActivity
 import com.lcq.composewechat.ui.screen.ProcessDialogComponent
-import com.lcq.composewechat.ui.screen.ProgressLoading
-import com.lcq.composewechat.utils.book.autoCloseKeyboard
-import com.lcq.composewechat.utils.book.toast
+import com.lcq.composewechat.utils.autoCloseKeyboard
+import com.lcq.composewechat.utils.toast
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

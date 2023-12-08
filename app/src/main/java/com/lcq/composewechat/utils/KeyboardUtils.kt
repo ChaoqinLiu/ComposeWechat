@@ -1,4 +1,4 @@
-package com.lcq.composewechat.utils.book
+package com.lcq.composewechat.utils
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.ui.ExperimentalComposeUiApi

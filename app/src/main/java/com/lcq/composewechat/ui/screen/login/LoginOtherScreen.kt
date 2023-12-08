@@ -26,8 +26,8 @@ import com.lcq.composewechat.CQDivider
 import com.lcq.composewechat.activity.MainActivity
 import com.lcq.composewechat.activity.PhoneLoginActivity
 import com.lcq.composewechat.ui.screen.ProcessDialogComponent
-import com.lcq.composewechat.utils.book.autoCloseKeyboard
-import com.lcq.composewechat.utils.book.toast
+import com.lcq.composewechat.utils.autoCloseKeyboard
+import com.lcq.composewechat.utils.toast
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -115,7 +115,7 @@ fun LoginOtherScreen() {
                                         phoneText = it
                                     },
                                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                                        containerColor = Color.White,
+                                        containerColor = Color.Transparent,
                                         focusedBorderColor = Color.White,
                                         unfocusedBorderColor = Color.White,
                                     ),
@@ -163,7 +163,7 @@ fun LoginOtherScreen() {
                                         pwdOrPhoneText = it
                                     },
                                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                                        containerColor = Color.White,
+                                        containerColor = Color.Transparent,
                                         focusedBorderColor = Color.Green,
                                         unfocusedBorderColor = Color(0xff888888),
                                         cursorColor = Color.Green

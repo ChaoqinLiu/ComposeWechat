@@ -1,4 +1,4 @@
-package com.lcq.composewechat.utils.book
+package com.lcq.composewechat.utils
 
 import android.content.Context
 import android.widget.Toast
