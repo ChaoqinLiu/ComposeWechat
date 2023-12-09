@@ -39,6 +39,7 @@ import com.lcq.composewechat.ui.route.LOGIN_OTHER
 import com.lcq.composewechat.ui.screen.ModalBottomSheetDialog
 import com.lcq.composewechat.ui.screen.ProcessDialogComponent
 import com.lcq.composewechat.extensions.autoCloseKeyboard
+import com.lcq.composewechat.extensions.click
 import com.lcq.composewechat.utils.EasyDataStore
 import com.lcq.composewechat.utils.toast
 import kotlinx.coroutines.delay
@@ -238,14 +239,14 @@ fun LoginScreen(navController: NavHostController) {
                                             start = 80.dp,
                                             end = 80.dp
                                         )
-                                        .clickable {
+                                        .click {
                                             if (pwdText == "") {
                                                 context.toast(if (isPwdAuth) "请输入密码" else "请输入验证码")
-                                                return@clickable
+                                                return@click
                                             }
                                             if (pwdText != "123456") {
                                                 context.toast(if (isPwdAuth) "密码不正确" else "验证码不正确")
-                                                return@clickable
+                                                return@click
                                             }
                                             loading.value = true
                                             scope.launch {
@@ -321,7 +322,10 @@ fun LoginScreen(navController: NavHostController) {
                                     modifier = Modifier
                                         .wrapContentWidth()
                                         .padding(top = 15.dp, start = 15.dp)
-                                        .clickable {
+                                        .click {
+                                            /**
+                                             * 显示底部弹窗
+                                             */
                                             scope.launch { modalBottomSheetState.show() }
                                         },
                                     textAlign = TextAlign.Start
@@ -339,7 +343,9 @@ fun LoginScreen(navController: NavHostController) {
                     modalBottomSheetState = modalBottomSheetState,
                     onSelect = {index, title ->
                         Log.d("LoginScreen", "index====$index  title=====$title")
-                        // 导航到登陆其他帐号
+                        /**
+                         * 导航到登陆其他帐号
+                         */
                         if (index == 0) {
                             navController.navigate(LOGIN_OTHER)
                         }
