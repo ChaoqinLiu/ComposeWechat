@@ -8,8 +8,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.core.view.WindowCompat
 import com.google.accompanist.insets.ProvideWindowInsets
-import com.lcq.composewechat.ui.screen.home.HomeNavScreen
 import com.lcq.composewechat.ui.screen.home.HomeScreen
+import com.lcq.composewechat.utils.EasyDataStore
 
 class MainActivity : ComponentActivity() {
 
@@ -31,6 +31,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ComposeHomeUI() {
     ProvideWindowInsets {
-        HomeNavScreen()
+        HomeScreen()
     }
 }

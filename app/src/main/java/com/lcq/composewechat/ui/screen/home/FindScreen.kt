@@ -12,16 +12,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.CQDivider
 import com.lcq.composewechat.data.ActionTitleItem
 import com.lcq.composewechat.view.ActionTitle
 import com.lcq.composewechat.R
 import com.lcq.composewechat.activity.MomentActivity
-import com.lcq.composewechat.ui.route.FRIENDS_MOMENT
-import com.lcq.composewechat.ui.route.HOME
-import kotlinx.coroutines.launch
 
 /**
  * author: liuchaoqin
@@ -29,9 +25,8 @@ import kotlinx.coroutines.launch
  * Describe ：
  */
 @Composable
-fun FindScreen(innerPadding: PaddingValues, navController: NavHostController) {
+fun FindScreen(innerPadding: PaddingValues) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
     val scrollState = rememberLazyListState()
     Surface {

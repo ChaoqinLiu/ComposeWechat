@@ -27,7 +27,7 @@ import com.lcq.composewechat.CQDivider
 import com.lcq.composewechat.R
 import com.lcq.composewechat.activity.MainActivity
 import com.lcq.composewechat.ui.screen.ProcessDialogComponent
-import com.lcq.composewechat.utils.autoCloseKeyboard
+import com.lcq.composewechat.extensions.autoCloseKeyboard
 import com.lcq.composewechat.utils.toast
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

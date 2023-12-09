@@ -12,13 +12,29 @@ import com.lcq.composewechat.enums.LifeState
 import com.lcq.composewechat.ui.screen.login.LoginScreen
 import com.lcq.composewechat.ui.screen.SplashScreen
 import com.lcq.composewechat.ui.screen.login.LoginNavScreen
+import com.lcq.composewechat.utils.EasyDataStore
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             ComposeLoginUI()
+        }
+        /**
+         * 记录密码后直接进入主页
+         */
+        val password = EasyDataStore.getData("password", "")
+        if (password != "") {
+            GlobalScope.launch {
+                delay(500)
+                MainActivity.navigate(this@LoginActivity)
+            }
         }
     }
 }

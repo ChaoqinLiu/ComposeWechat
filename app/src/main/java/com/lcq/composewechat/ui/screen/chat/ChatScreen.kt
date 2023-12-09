@@ -37,7 +37,7 @@ import com.lcq.composewechat.data.myAvatar
 import com.lcq.composewechat.enums.MessageType
 import com.lcq.composewechat.models.ChatSession
 import com.lcq.composewechat.ui.screen.Loading
-import com.lcq.composewechat.utils.autoCloseKeyboard
+import com.lcq.composewechat.extensions.autoCloseKeyboard
 import com.lcq.composewechat.viewmodel.ChatViewModel
 import github.leavesczy.compose_chat.base.utils.TimeUtils.toTalkTime
 import kotlinx.coroutines.delay

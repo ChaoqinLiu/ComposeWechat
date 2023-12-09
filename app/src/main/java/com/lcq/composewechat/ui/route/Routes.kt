@@ -24,11 +24,15 @@ const val LOGIN_PHONE = "loginPhone"
  */
 const val HOME = "home"
 /**
- * 朋友圈
+ * 通讯录
  */
-const val FRIENDS_MOMENT = "friendsMoment"
+const val ADDR_BOOK = "addrBook"
 
 /**
- * 图片预览
+ * 发现
  */
-const val IMAGE_BROWSER = "imageBrowser"
+const val FIND = "find"
+/**
+ * 我的
+ */
+const val MINE = "mine"

@@ -26,7 +26,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -39,7 +38,8 @@ import com.lcq.composewechat.data.myAvatar
 import com.lcq.composewechat.ui.route.LOGIN_OTHER
 import com.lcq.composewechat.ui.screen.ModalBottomSheetDialog
 import com.lcq.composewechat.ui.screen.ProcessDialogComponent
-import com.lcq.composewechat.utils.autoCloseKeyboard
+import com.lcq.composewechat.extensions.autoCloseKeyboard
+import com.lcq.composewechat.utils.EasyDataStore
 import com.lcq.composewechat.utils.toast
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -50,13 +50,15 @@ import kotlinx.coroutines.launch
  * Describe ：
  */
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun LoginScreen(navController: NavHostController) {
     val context = LocalContext.current as Activity
     rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
-    var pwdText by remember { mutableStateOf("") }
+
+    val password = EasyDataStore.getData("password", "")
+    var pwdText by remember { mutableStateOf(password) }
     val loading = remember { mutableStateOf(false) }
     var isFocus by remember { mutableStateOf(false) }
     var isPwdAuth by remember { mutableStateOf(true) }
@@ -250,6 +252,7 @@ fun LoginScreen(navController: NavHostController) {
                                                 delay(2000)
                                                 loading.value = false
                                                 MainActivity.navigate(context)
+                                                EasyDataStore.putData("password", pwdText)
                                             }
                                         },
                                     textAlign = TextAlign.Center

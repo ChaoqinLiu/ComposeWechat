@@ -1,8 +1,8 @@
 package com.lcq.composewechat.ui.screen.home
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircleOutline
@@ -18,11 +18,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.R
+import com.lcq.composewechat.activity.MainActivity
 import com.lcq.composewechat.data.navList
 import com.lcq.composewechat.data.titles
+import com.lcq.composewechat.extensions.click
+import com.lcq.composewechat.utils.EasyDataStore
 
 /**
  * author: liuchaoqin
@@ -32,7 +34,7 @@ import com.lcq.composewechat.data.titles
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen() {
     var selectIndex by rememberSaveable { mutableStateOf(0) }
     val context = LocalContext.current
     rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
@@ -97,9 +99,7 @@ fun HomeScreen(navController: NavHostController) {
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxHeight()
-                                .clickable {
-                                    selectIndex = index
-                                }
+                                .click { selectIndex = index }
                         ) {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -131,7 +131,7 @@ fun HomeScreen(navController: NavHostController) {
                     when(selectIndex){
                         0 -> ChatSessionScreen(innerPadding)
                         1 -> AddrBookScreen(innerPadding)
-                        2 -> FindScreen(innerPadding, navController)
+                        2 -> FindScreen(innerPadding)
                         3 -> MineScreen(innerPadding)
                     }
                 }

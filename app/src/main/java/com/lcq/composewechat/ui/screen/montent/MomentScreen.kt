@@ -45,7 +45,6 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.activity.ImageBrowserActivity
 import com.lcq.composewechat.data.MomentItem
 import com.lcq.composewechat.data.myAvatar
-import com.lcq.composewechat.ui.route.IMAGE_BROWSER
 import com.lcq.composewechat.ui.screen.Loading
 import com.lcq.composewechat.viewmodel.MomentViewModel
 
