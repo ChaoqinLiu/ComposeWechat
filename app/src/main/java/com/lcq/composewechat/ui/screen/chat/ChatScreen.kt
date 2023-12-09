@@ -34,11 +34,13 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.CQDivider
 import com.lcq.composewechat.R
 import com.lcq.composewechat.data.myAvatar
-import com.lcq.composewechat.enums.ChatAlign
+import com.lcq.composewechat.enums.MessageType
 import com.lcq.composewechat.models.ChatSession
 import com.lcq.composewechat.ui.screen.Loading
 import com.lcq.composewechat.utils.autoCloseKeyboard
 import com.lcq.composewechat.viewmodel.ChatViewModel
+import github.leavesczy.compose_chat.base.utils.TimeUtils.toTalkTime
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -212,11 +214,19 @@ fun ChatScreen(viewModel: ChatViewModel = ChatViewModel(), session: ChatSession)
                                             .background(Color(0xff5ECC71))
                                             .padding(top = 4.dp)
                                             .clickable {
-                                                viewModel.sendMessage(inputText)
-                                                inputText = ""
+                                                viewModel.sendMessage(inputText, MessageType.SEND)
                                                 // 发送信息后滚动到最底部
                                                 scope.launch {
                                                     scrollState.scrollToItem(0)
+                                                    /**
+                                                     * 模拟收到的信息
+                                                     */
+                                                    delay(100)
+                                                    viewModel.sendMessage(
+                                                        inputText,
+                                                        MessageType.RECEIVE
+                                                    )
+                                                    inputText = ""
                                                 }
                                             },
                                         textAlign = TextAlign.Center
@@ -268,114 +278,135 @@ fun ChatScreen(viewModel: ChatViewModel = ChatViewModel(), session: ChatSession)
 @Composable
 fun MessageItemView(it: ChatSession, session: ChatSession) {
     Box(
-        contentAlignment = if (it.chatAlign == ChatAlign.START) Alignment.CenterStart else Alignment.CenterEnd,
+        contentAlignment = if (it.messageType == MessageType.RECEIVE) Alignment.CenterStart else Alignment.CenterEnd,
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(
                 top = 30.dp,
-                start = if (it.chatAlign == ChatAlign.START) 0.dp else 40.dp,
-                end = if (it.chatAlign == ChatAlign.END) 0.dp else 40.dp
+                start = if (it.messageType == MessageType.RECEIVE) 0.dp else 40.dp,
+                end = if (it.messageType == MessageType.SEND) 0.dp else 40.dp
             ),
     ) {
-        Row(modifier = Modifier
-            .wrapContentWidth()
+        Column(modifier = Modifier
+            .fillMaxWidth()
             .wrapContentHeight()
         ) {
             /**
-             * 他人头像（左边）
+             * 对话时间
              */
-            if(it.chatAlign == ChatAlign.START) {
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(Color.White)
-                        .weight(1f)
-                ) {
-                    Image(
-                        painter = rememberCoilPainter(request = session.avatar),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(4.dp))
-                    )
-                }
-            }
             Box(
-                modifier = Modifier
-                    .weight(6f)
-                    .wrapContentHeight(),
-                contentAlignment =
-                    if (it.chatAlign == ChatAlign.START) Alignment.TopStart
-                    else Alignment.TopEnd
+                modifier = Modifier.fillMaxWidth().padding(bottom = 20.dp),
+                contentAlignment = Alignment.Center
             ) {
-                /**
-                 * 尖角
-                 */
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp),
-                    contentAlignment = if (it.chatAlign == ChatAlign.START) Alignment.TopStart else Alignment.TopEnd
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.PlayArrow,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(20.dp)
-                            .rotate(if (it.chatAlign == ChatAlign.END) 0f else 180f),
-                        tint = if (it.chatAlign == ChatAlign.START) Color.White
-                        else Color(0xffA9EA7A)
-                    )
-                }
-                /**
-                 * 文本内容
-                 */
-                Box(
-                    modifier = Modifier
-                        .padding(
-                            start = if (it.chatAlign == ChatAlign.START) 12.dp else 0.dp,
-                            end = if (it.chatAlign == ChatAlign.START) 0.dp else 12.dp,
-                        )
-                        .clip(RoundedCornerShape(4.dp))
-                        .wrapContentWidth()
-                        .wrapContentHeight(Alignment.CenterVertically)
-                        .background(
-                            if (it.chatAlign == ChatAlign.START) Color.White else Color(
-                                0xffA9EA7A
-                            )
-                        ),
-                ) {
-                    Text(
-                        modifier = Modifier.padding(8.dp),
-                        text = it.message,
-                        fontSize = 16.sp
-                    )
-                }
+               Text(
+                   text = toTalkTime(it.createBy),
+                   fontSize = 12.sp,
+                   color = Color(0xff888888)
+               )
             }
             /**
-             * 本人头像（右边）
+             * 对话信息
              */
-            if(it.chatAlign == ChatAlign.END) {
+            Row(modifier = Modifier
+                .wrapContentWidth()
+                .wrapContentHeight()
+            ) {
+                /**
+                 * 他人头像（左边）
+                 */
+                if(it.messageType == MessageType.RECEIVE) {
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                            .background(Color.White)
+                            .weight(1f)
+                    ) {
+                        Image(
+                            painter = rememberCoilPainter(request = session.avatar),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(4.dp))
+                        )
+                    }
+                }
                 Box(
                     modifier = Modifier
-                        .size(40.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(Color.White)
-                        .weight(1f)
+                        .weight(6f)
+                        .wrapContentHeight(),
+                    contentAlignment =
+                    if (it.messageType == MessageType.RECEIVE) Alignment.TopStart
+                    else Alignment.TopEnd
                 ) {
-                    Image(
-                        painter = rememberCoilPainter(request = myAvatar),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
+                    /**
+                     * 尖角
+                     */
+                    Box(
                         modifier = Modifier
-                            .fillMaxSize()
+                            .fillMaxWidth()
+                            .padding(top = 10.dp),
+                        contentAlignment = if (it.messageType == MessageType.RECEIVE) Alignment.TopStart else Alignment.TopEnd
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.PlayArrow,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(20.dp)
+                                .rotate(if (it.messageType == MessageType.SEND) 0f else 180f),
+                            tint = if (it.messageType == MessageType.RECEIVE) Color.White
+                            else Color(0xffA9EA7A)
+                        )
+                    }
+                    /**
+                     * 文本内容
+                     */
+                    Box(
+                        modifier = Modifier
+                            .padding(
+                                start = if (it.messageType == MessageType.RECEIVE) 12.dp else 0.dp,
+                                end = if (it.messageType == MessageType.RECEIVE) 0.dp else 12.dp,
+                            )
                             .clip(RoundedCornerShape(4.dp))
-                    )
+                            .wrapContentWidth()
+                            .wrapContentHeight(Alignment.CenterVertically)
+                            .background(
+                                if (it.messageType == MessageType.RECEIVE) Color.White else Color(
+                                    0xffA9EA7A
+                                )
+                            ),
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(8.dp),
+                            text = it.message,
+                            fontSize = 16.sp
+                        )
+                    }
                 }
-            }
+                /**
+                 * 本人头像（右边）
+                 */
+                if(it.messageType == MessageType.SEND) {
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                            .background(Color.White)
+                            .weight(1f)
+                    ) {
+                        Image(
+                            painter = rememberCoilPainter(request = myAvatar),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(4.dp))
+                        )
+                    }
+                }
+            } 
         }
     }
 }

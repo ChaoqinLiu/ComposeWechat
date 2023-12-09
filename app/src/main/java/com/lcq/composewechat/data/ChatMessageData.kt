@@ -1,7 +1,7 @@
 package com.lcq.composewechat.data
 
-import com.lcq.composewechat.enums.ChatAlign
-import com.lcq.composewechat.enums.ChatType
+import com.lcq.composewechat.enums.MessageType
+import com.lcq.composewechat.enums.MediaType
 import com.lcq.composewechat.models.ChatSession
 
 /**
@@ -15,98 +15,112 @@ val chatList = listOf(
         "https://img.duoziwang.com/2018/24/12130927112411.jpg",
         "小美",
         "明天去哪玩去呢？",
-        ChatType.TEXT,
-        ChatAlign.START
+        MediaType.TEXT,
+        MessageType.RECEIVE,
+        1702006212
     ),
     ChatSession(
         "https://img.duoziwang.com/2018/24/12130927112411.jpg",
         "小美",
         "明天去哪玩去呢？",
-        ChatType.TEXT,
-        ChatAlign.END
+        MediaType.TEXT,
+        MessageType.SEND,
+        1702006332
     ),
     ChatSession(
         "https://img.duoziwang.com/2018/24/12130927112411.jpg",
         "小美",
         "明天去哪玩去呢？",
-        ChatType.TEXT,
-        ChatAlign.START
+        MediaType.TEXT,
+        MessageType.RECEIVE,
+        1702009932
     ),
     ChatSession(
         "https://img.duoziwang.com/2018/24/12130927112411.jpg",
         "小美",
         "明天去哪玩去呢？",
-        ChatType.TEXT,
-        ChatAlign.END
+        MediaType.TEXT,
+        MessageType.SEND,
+        1702010172
     ),
     ChatSession(
         "https://img.duoziwang.com/2018/24/12130927112411.jpg",
         "小美",
         "明天去哪玩去呢？",
-        ChatType.TEXT,
-        ChatAlign.START
+        MediaType.TEXT,
+        MessageType.RECEIVE,
+        1702010322
     ),
     ChatSession(
         "https://img.duoziwang.com/2018/24/12130927112411.jpg",
         "小美",
         "明天去哪玩去呢？不知道呢，要不去爬山吧带我飞哥任何人也有人",
-        ChatType.TEXT,
-        ChatAlign.END
+        MediaType.TEXT,
+        MessageType.SEND,
+        1702086093
     ),
     ChatSession(
         "https://img.duoziwang.com/2018/24/12130927112411.jpg",
         "小美",
         "明天去哪玩去呢？不知道呢，要不去爬山吧带我飞哥任何人也有人",
-        ChatType.TEXT,
-        ChatAlign.START
+        MediaType.TEXT,
+        MessageType.RECEIVE,
+        1702016322
     ),
     ChatSession(
         "https://img.duoziwang.com/2018/24/12130927112411.jpg",
         "小美",
         "明天去哪玩去呢？",
-        ChatType.TEXT,
-        ChatAlign.START
+        MediaType.TEXT,
+        MessageType.RECEIVE,
+        1702030722
     ),
     ChatSession(
         "https://img.duoziwang.com/2018/24/12130927112411.jpg",
         "小美",
         "明天去哪玩去呢？",
-        ChatType.TEXT,
-        ChatAlign.END
+        MediaType.TEXT,
+        MessageType.SEND,
+        1702034142
     ),
     ChatSession(
         "https://img.duoziwang.com/2018/24/12130927112411.jpg",
         "小美",
         "明天去哪玩去呢？",
-        ChatType.TEXT,
-        ChatAlign.START
+        MediaType.TEXT,
+        MessageType.RECEIVE,
+        1702041522
     ),
     ChatSession(
         "https://img.duoziwang.com/2018/24/12130927112411.jpg",
         "小美",
         "明天去哪玩去呢？",
-        ChatType.TEXT,
-        ChatAlign.END
+        MediaType.TEXT,
+        MessageType.SEND,
+        1702055922
     ),
     ChatSession(
         "https://img.duoziwang.com/2018/24/12130927112411.jpg",
         "小美",
         "明天去哪玩去呢？不知道呢，要不去爬山吧带我飞哥任何人也有人",
-        ChatType.TEXT,
-        ChatAlign.START
+        MediaType.TEXT,
+        MessageType.RECEIVE,
+        1702084722
     ),
     ChatSession(
         "https://img.duoziwang.com/2018/24/12130927112411.jpg",
         "小美",
         "明天去哪玩去呢？",
-        ChatType.TEXT,
-        ChatAlign.END
+        MediaType.TEXT,
+        MessageType.SEND,
+        1702085442
     ),
     ChatSession(
         "https://img.duoziwang.com/2018/24/12130927112411.jpg",
         "小美",
         "明天去哪玩去呢？不知道呢，要不去爬山吧带我飞哥任何人也有人",
-        ChatType.TEXT,
-        ChatAlign.START
+        MediaType.TEXT,
+        MessageType.RECEIVE,
+        1702087242
     ),
 )

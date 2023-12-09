@@ -1,8 +1,8 @@
 package com.lcq.composewechat.models
 
 import android.os.Parcelable
-import com.lcq.composewechat.enums.ChatAlign
-import com.lcq.composewechat.enums.ChatType
+import com.lcq.composewechat.enums.MessageType
+import com.lcq.composewechat.enums.MediaType
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -16,6 +16,7 @@ class ChatSession(
     val avatar: String,
     val name: String,
     val message: String,
-    val messageType: ChatType,
-    val chatAlign: ChatAlign
+    val mediaType: MediaType,
+    val messageType: MessageType,
+    val createBy: Long
     ):  Parcelable

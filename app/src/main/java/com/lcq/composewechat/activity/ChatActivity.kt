@@ -7,10 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import com.lcq.composewechat.data.MessageItem
-import com.lcq.composewechat.enums.ChatAlign
-import com.lcq.composewechat.enums.ChatType
+import com.lcq.composewechat.enums.MessageType
+import com.lcq.composewechat.enums.MediaType
 import com.lcq.composewechat.models.ChatSession
 import com.lcq.composewechat.ui.screen.chat.ChatScreen
+import github.leavesczy.compose_chat.base.utils.TimeUtils
 
 /**
  * author: liuchaoqin
@@ -36,8 +37,9 @@ class ChatActivity : AppCompatActivity() {
                 messageItem.avatar,
                 messageItem.name,
                 messageItem.message,
-                ChatType.TEXT,
-                ChatAlign.START
+                MediaType.TEXT,
+                MessageType.RECEIVE,
+                TimeUtils.currentTimeMillis()
             )
             intent.putExtra("chatSession", session)
             context.startActivity(intent)

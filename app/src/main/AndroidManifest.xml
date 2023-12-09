@@ -37,6 +37,10 @@
             android:name=".activity.MomentActivity"
             android:exported="false"
             android:theme="@style/Theme.ComposeWechat.NoActionBar" />
+        <activity
+            android:name=".activity.ImageBrowserActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ComposeWechat.NoActionBar" />
     </application>
 
 </manifest>

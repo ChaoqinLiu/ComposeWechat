@@ -1,5 +1,6 @@
 package com.lcq.composewechat.ui.screen.image
 
+import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*
@@ -12,8 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.pager.*
 import kotlin.math.absoluteValue
@@ -25,7 +26,7 @@ import kotlin.math.absoluteValue
  */
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ImageBrowserScreen(images: ArrayList<String>, currentIndex: Int, navController: NavHostController) {
+fun ImageBrowserScreen(images: ArrayList<String>, currentIndex: Int) {
 
     /**
      * 界面状态变更
@@ -39,7 +40,7 @@ fun ImageBrowserScreen(images: ArrayList<String>, currentIndex: Int, navControll
             contentPadding = PaddingValues(horizontal = 0.dp),
             modifier = Modifier.fillMaxSize()
         ) { page ->
-            ImageItem(images[page], page, this, navController)
+            ImageBrowserItem(images[page], page, this)
         }
 
         HorizontalPagerIndicator(
@@ -52,22 +53,19 @@ fun ImageBrowserScreen(images: ArrayList<String>, currentIndex: Int, navControll
                 .align(Alignment.BottomCenter)
                 .padding(60.dp)
         )
-
-        LaunchedEffect(pageState) {
-            snapshotFlow { pageState }.collect { pageState ->
-                println("ImageBrowserItem LaunchedEffect pageState currentPageOffset: ${pageState.currentPageOffset}")
-            }
-        }
     }
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ImageItem(image: String, page: Int = 0, pagerScope: PagerScope, navController: NavHostController) {
+fun ImageBrowserItem(image: String, page: Int = 0, pagerScope: PagerScope) {
     /**
      * 缩放比例
      */
     var scale by remember { mutableStateOf(1f) }
+
+    val context = LocalContext.current as Activity
+
     /**
      * 偏移量
      */
@@ -77,7 +75,7 @@ fun ImageItem(image: String, page: Int = 0, pagerScope: PagerScope, navControlle
      * 监听手势状态变换
      */
     val state =
-        rememberTransformableState(onTransformation = { zoomChange, _, _ ->
+        rememberTransformableState(onTransformation = { zoomChange, panChange, rotationChange ->
             scale = (zoomChange * scale).coerceAtLeast(1f)
             scale = if (scale > 5f) {
                 5f
@@ -121,7 +119,7 @@ fun ImageItem(image: String, page: Int = 0, pagerScope: PagerScope, navControlle
                             offset = Offset.Zero
                         },
                         onTap = {
-                            navController.popBackStack()
+                            context.finish()
                         }
                     )
                 }
