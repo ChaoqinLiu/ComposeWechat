@@ -18,13 +18,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.R
 import com.lcq.composewechat.activity.MainActivity
 import com.lcq.composewechat.data.navList
 import com.lcq.composewechat.data.titles
 import com.lcq.composewechat.extensions.click
+import com.lcq.composewechat.ui.screen.image.ImageBrowserItem
 import com.lcq.composewechat.utils.EasyDataStore
+import kotlinx.coroutines.launch
 
 /**
  * author: liuchaoqin
@@ -32,11 +37,13 @@ import com.lcq.composewechat.utils.EasyDataStore
  * Describe ：首页
  */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
 @Composable
 fun HomeScreen() {
     var selectIndex by rememberSaveable { mutableStateOf(0) }
+    val pageState = rememberPagerState(initialPage = 0)
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
     Surface(
         Modifier
@@ -99,7 +106,15 @@ fun HomeScreen() {
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxHeight()
-                                .click { selectIndex = index }
+                                .click {
+                                    selectIndex = index
+                                    /**
+                                     * 点击底部的tab切换对应的page
+                                     */
+                                    scope.launch {
+                                        pageState.scrollToPage(index)
+                                    }
+                                }
                         ) {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -128,11 +143,24 @@ fun HomeScreen() {
             },
             content = { innerPadding ->
                 Box {
-                    when(selectIndex){
-                        0 -> ChatSessionScreen(innerPadding)
-                        1 -> AddrBookScreen(innerPadding)
-                        2 -> FindScreen(innerPadding)
-                        3 -> MineScreen(innerPadding)
+                    HorizontalPager(
+                        count = 4,
+                        state = pageState,
+                        contentPadding = PaddingValues(horizontal = 0.dp),
+                        modifier = Modifier.fillMaxSize()
+                    ) { page ->
+                        when(page) {
+                            0 -> ChatSessionScreen(innerPadding)
+                            1 -> AddrBookScreen(innerPadding)
+                            2 -> FindScreen(innerPadding)
+                            3 -> MineScreen(innerPadding)
+                        }
+                    }
+                    LaunchedEffect(pageState) {
+                        snapshotFlow { pageState.currentPage }.collect { page ->
+                            selectIndex = page
+                            println("LaunchedEffect currentPage: $page")
+                        }
                     }
                 }
             }

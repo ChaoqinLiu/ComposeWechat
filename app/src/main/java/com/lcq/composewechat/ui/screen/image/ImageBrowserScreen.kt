@@ -53,6 +53,12 @@ fun ImageBrowserScreen(images: ArrayList<String>, currentIndex: Int) {
                 .align(Alignment.BottomCenter)
                 .padding(60.dp)
         )
+
+        LaunchedEffect(pageState) {
+            snapshotFlow { pageState.currentPage }.collect { page ->
+                println("ImageBrowserItem LaunchedEffect currentPage: $page")
+            }
+        }
     }
 }
 

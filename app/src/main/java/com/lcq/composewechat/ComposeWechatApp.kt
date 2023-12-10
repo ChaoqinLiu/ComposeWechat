@@ -7,10 +7,10 @@ import android.app.Application
  * 创建时间：2023/12/9
  * Describe ：
  */
-class App : Application() {
+class ComposeWechatApp : Application() {
 
     companion object {
-        lateinit var instance : App
+        lateinit var instance : ComposeWechatApp
     }
 
     override fun onCreate() {

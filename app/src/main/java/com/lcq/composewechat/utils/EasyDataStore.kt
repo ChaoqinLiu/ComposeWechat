@@ -3,7 +3,7 @@ package com.lcq.composewechat.utils
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
-import com.lcq.composewechat.App
+import com.lcq.composewechat.ComposeWechatApp
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
@@ -16,8 +16,8 @@ import kotlinx.coroutines.runBlocking
 class EasyDataStore {
 
     companion object EasyDataStore {
-        private val App.dataStore : DataStore<Preferences> by preferencesDataStore(name = "compose_wechat")
-        val dataStore = App.instance.dataStore
+        private val ComposeWechatApp.dataStore : DataStore<Preferences> by preferencesDataStore(name = "compose_wechat")
+        private val dataStore = ComposeWechatApp.instance.dataStore
 
         /**
          * 存放Int数据

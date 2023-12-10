@@ -16,7 +16,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
  * 首页底部导航栏
  */
 data class NavigationItem(
+    /**
+     * 名称
+     */
     val title: String,
+    /**
+     * 图标
+     */
     val icon: ImageVector,
 )
 
@@ -32,6 +38,9 @@ data class MessageItem(
  */
 val titles = listOf("微信", "通讯录", "发现", "")
 
+/**
+ * 底部导航数据
+ */
 val navList = listOf(
     NavigationItem(
         "微信",
@@ -46,7 +55,7 @@ val navList = listOf(
         Icons.Filled.Explore,
     ),
     NavigationItem(
-        "我的",
+        "我",
         Icons.Filled.Person,
     ),
 )
