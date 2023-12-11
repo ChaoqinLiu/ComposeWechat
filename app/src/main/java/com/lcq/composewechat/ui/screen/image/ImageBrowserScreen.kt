@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.pager.*
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlin.math.absoluteValue
 
 /**
@@ -28,6 +29,7 @@ import kotlin.math.absoluteValue
 @Composable
 fun ImageBrowserScreen(images: ArrayList<String>, currentIndex: Int) {
 
+    rememberSystemUiController().setStatusBarColor(Color.Black, darkIcons = true)
     /**
      * 界面状态变更
      */

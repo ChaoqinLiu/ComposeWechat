@@ -41,6 +41,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.insets.statusBarsHeight
+import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.activity.ImageBrowserActivity
 import com.lcq.composewechat.data.MomentItem
@@ -59,45 +60,54 @@ import com.lcq.composewechat.viewmodel.MomentViewModel
 fun MomentScreen(
     viewModel: MomentViewModel = MomentViewModel(),
 ) {
+    /**
+     * 状态栏设置
+     */
+    val systemUiController = rememberSystemUiController()
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = Color.Transparent,
+            darkIcons = false,
+        )
+    }
+    /**
+     * 获取状态栏高度
+     */
+    val statusBarHeight = LocalDensity.current.run {
+        WindowInsets.statusBars.getTop(this).toDp()
+    }
     val lazyMomentItems = viewModel.rankMomentItems.collectAsLazyPagingItems()
-    rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
     val scrollState = rememberLazyListState()
     val context = LocalContext.current
-    Surface {
-        Scaffold(
-            content = { paddingValues ->
-                Box {
-                    LazyColumn(
-                        contentPadding = paddingValues,
-                        state = scrollState,
-                    ) {
-                        item {
-                            MomentTopItem()
-                        }
-                        items(lazyMomentItems) {
-                            it?.let {
-                                MomentItemView(it, context)
-                            }
-                        }
-
-                        lazyMomentItems.apply {
-                            when (loadState.append) {
-                                is LoadState.Loading -> {
-                                    item {
-                                        Loading()
-                                    }
-                                } else -> {
-                            }
-                            }
-                        }
-                        item {
-                            Spacer(modifier = Modifier.height(16.dp))
-                        }
-                    }
-                    MomentHeader(scrollState)
+    Box {
+        LazyColumn(
+            contentPadding = PaddingValues(0.dp),
+            state = scrollState,
+        ) {
+            item {
+                MomentTopItem()
+            }
+            items(lazyMomentItems) {
+                it?.let {
+                    MomentItemView(it, context)
                 }
             }
-        )
+
+            lazyMomentItems.apply {
+                when (loadState.append) {
+                    is LoadState.Loading -> {
+                        item {
+                            Loading()
+                        }
+                    } else -> {
+                }
+                }
+            }
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
+        MomentHeader(scrollState, statusBarHeight, systemUiController)
     }
 }
 
@@ -260,6 +270,9 @@ fun MomentImageItemView(it: MomentItem, context: Context) {
     }
 }
 
+/**
+ * 顶部的朋友圈背景图
+ */
 @Composable
 fun MomentTopItem() {
     Box(modifier = Modifier
@@ -271,7 +284,7 @@ fun MomentTopItem() {
                 .height(300.dp)
         ) {
             Image(
-                painter = rememberCoilPainter(request = "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202005%2F17%2F20200517115233_ZMzvN.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1704099655&t=1de9e0c8fa0062c3a405316a7bd66009"),
+                painter = rememberCoilPainter(request = "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202007%2F01%2F20200701134954_yVnHK.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1704867043&t=210af5b7a7cb8def124dac87711ebf47"),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
@@ -280,7 +293,7 @@ fun MomentTopItem() {
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                Spacer(modifier = Modifier.statusBarsHeight())
+                //Spacer(modifier = Modifier.statusBarsHeight())
             }
         }
         Box(
@@ -318,8 +331,15 @@ fun MomentTopItem() {
     }
 }
 
+/**
+ * 朋友圈标题栏
+ */
 @Composable
-fun MomentHeader(scrollState: LazyListState) {
+fun MomentHeader(
+    scrollState: LazyListState,
+    statusBarHeight: Dp,
+    systemUiController: SystemUiController
+) {
     val target = LocalDensity.current.run { 200.dp.toPx() }
     val context = LocalContext.current as Activity
     val firstVisibleItemIndex = remember { derivedStateOf { scrollState.firstVisibleItemIndex } }
@@ -329,11 +349,34 @@ fun MomentHeader(scrollState: LazyListState) {
     } else {
         firstVisibleItemScrollOffset.value / target
     }
+
+    /**
+     * 定义一个变量记录状态栏的颜色设置，避免滚动时一直在修改
+     */
+    var isTransparent by rememberSaveable { mutableStateOf(true) }
+    if (scrollPercent > 0) {
+        if (isTransparent) {
+            println("scrollPercent=====状态栏颜色为:Color(0xFFEDEDED)")
+            systemUiController.setSystemBarsColor(
+                color = Color(0xFFEDEDED),
+                darkIcons = true,
+            )
+            isTransparent = false
+        }
+    } else {
+        println("scrollPercent=====状态栏颜色为:Color.Transparent")
+        systemUiController.setSystemBarsColor(
+            color = Color.Transparent,
+            darkIcons = false,
+        )
+        isTransparent = true
+    }
     val backgroundColor = Color(0xFFEDEDED)
     Column {
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(top = statusBarHeight)
                 .statusBarsHeight()
                 .alpha(scrollPercent)
                 .background(backgroundColor)

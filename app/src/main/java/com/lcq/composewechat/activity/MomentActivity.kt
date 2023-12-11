@@ -5,9 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
 import androidx.core.view.WindowCompat
-import com.google.accompanist.insets.ProvideWindowInsets
 import com.lcq.composewechat.ui.screen.montent.MomentScreen
 
 /**
@@ -26,16 +24,9 @@ class MomentActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, true)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            MomentUI()
+            MomentScreen()
         }
-    }
-}
-
-@Composable
-fun MomentUI() {
-    ProvideWindowInsets {
-        MomentScreen()
     }
 }
