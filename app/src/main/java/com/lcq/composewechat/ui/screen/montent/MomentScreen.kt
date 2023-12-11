@@ -192,17 +192,6 @@ fun MomentImageItemView(it: MomentItem, context: Context) {
                                         images = images,
                                         currentIndex = index
                                     )
-//                                    val bundle = Bundle().apply {
-//                                        putStringArrayList("images", images)
-//                                        putInt("currentIndex", index)
-//                                    }
-//                                    val destination = navController.graph.findNode(IMAGE_BROWSER)
-//                                    if (destination != null) {
-//                                        navController.navigate(
-//                                            resId = destination.id,
-//                                            args = bundle
-//                                        )
-//                                    }
                                 }
                         ) {
                             Image(
@@ -278,6 +267,9 @@ fun MomentTopItem() {
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(380.dp)) {
+        /**
+         * 背景图片
+         */
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -296,6 +288,9 @@ fun MomentTopItem() {
                 //Spacer(modifier = Modifier.statusBarsHeight())
             }
         }
+        /**
+         * 右下角的个人信息
+         */
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -340,10 +335,22 @@ fun MomentHeader(
     statusBarHeight: Dp,
     systemUiController: SystemUiController
 ) {
-    val target = LocalDensity.current.run { 200.dp.toPx() }
     val context = LocalContext.current as Activity
+    /**
+     *  滚动距离的目标值
+     */
+    val target = LocalDensity.current.run { 250.dp.toPx() }
+    /**
+     * 列表的索引值
+     */
     val firstVisibleItemIndex = remember { derivedStateOf { scrollState.firstVisibleItemIndex } }
+    /**
+     * 当前滚动的值（Y轴距离）
+     */
     val firstVisibleItemScrollOffset = remember { derivedStateOf { scrollState.firstVisibleItemScrollOffset } }
+    /**
+     * 滚动的百分比
+     */
     val scrollPercent: Float = if (firstVisibleItemIndex.value > 0) {
         1f
     } else {
@@ -356,7 +363,6 @@ fun MomentHeader(
     var isTransparent by rememberSaveable { mutableStateOf(true) }
     if (scrollPercent > 0) {
         if (isTransparent) {
-            println("scrollPercent=====状态栏颜色为:Color(0xFFEDEDED)")
             systemUiController.setSystemBarsColor(
                 color = Color(0xFFEDEDED),
                 darkIcons = true,
@@ -364,7 +370,6 @@ fun MomentHeader(
             isTransparent = false
         }
     } else {
-        println("scrollPercent=====状态栏颜色为:Color.Transparent")
         systemUiController.setSystemBarsColor(
             color = Color.Transparent,
             darkIcons = false,

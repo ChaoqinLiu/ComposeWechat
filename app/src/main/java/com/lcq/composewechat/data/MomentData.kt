@@ -7,11 +7,29 @@ package com.lcq.composewechat.data
 ]*/
 
 data class MomentItem(
+    /**
+     * 头像
+     */
     val avatar: String,
+    /**
+     * 姓名
+     */
     val name: String,
+    /**
+     * 朋友圈内容
+     */
     val content: String,
+    /**
+     * 图片列表
+     */
     val images: List<String>,
+    /**
+     * 发布时间
+     */
     val createTime: String,
+    /**
+     * 评论的内容（正常是一个比较复杂的结构，我这里只是单纯的一个文本）
+     */
     val comment: String? = null,
 )
 
