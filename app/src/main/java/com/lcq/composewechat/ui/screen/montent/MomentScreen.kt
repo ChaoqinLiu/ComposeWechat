@@ -112,9 +112,6 @@ fun MomentScreen(
 }
 
 @Composable
-fun MomentScreenUI() {}
-
-@Composable
 fun MomentItemView(it: MomentItem, context: Context) {
     Box(modifier = Modifier
         .fillMaxWidth()
