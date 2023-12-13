@@ -1,7 +1,6 @@
 package com.lcq.composewechat.ui.screen.home
 
 import android.annotation.SuppressLint
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -23,12 +22,9 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.R
-import com.lcq.composewechat.activity.MainActivity
 import com.lcq.composewechat.data.navList
 import com.lcq.composewechat.data.titles
 import com.lcq.composewechat.extensions.click
-import com.lcq.composewechat.ui.screen.image.ImageBrowserItem
-import com.lcq.composewechat.utils.EasyDataStore
 import kotlinx.coroutines.launch
 
 /**

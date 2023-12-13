@@ -2,7 +2,6 @@ package com.lcq.composewechat.ui.screen.montent
 
 import android.app.Activity
 import android.content.Context
-import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -35,7 +33,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
@@ -43,7 +40,7 @@ import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.lcq.composewechat.activity.ImageBrowserActivity
+import com.lcq.composewechat.activity.ImagePreviewActivity
 import com.lcq.composewechat.data.MomentItem
 import com.lcq.composewechat.data.myAvatar
 import com.lcq.composewechat.ui.screen.Loading
@@ -184,7 +181,7 @@ fun MomentImageItemView(it: MomentItem, context: Context) {
                                     it.images.forEachIndexed { _, s ->
                                         images.add(s)
                                     }
-                                    ImageBrowserActivity.navigate(
+                                    ImagePreviewActivity.navigate(
                                         context = context,
                                         images = images,
                                         currentIndex = index

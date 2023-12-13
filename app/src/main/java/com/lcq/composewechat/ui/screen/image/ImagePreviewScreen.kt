@@ -27,24 +27,23 @@ import kotlin.math.absoluteValue
  */
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ImageBrowserScreen(images: ArrayList<String>, currentIndex: Int) {
+fun ImagePreviewScreen(images: ArrayList<String>, currentIndex: Int) {
 
     rememberSystemUiController().setStatusBarColor(Color.Black, darkIcons = true)
-    /**
-     * 界面状态变更
-     */
+    /*** 界面状态变更 */
     val pageState = rememberPagerState(initialPage = currentIndex)
 
     Box {
+        /*** 图片部分 */
         HorizontalPager(
             count = images.size,
             state = pageState,
             contentPadding = PaddingValues(horizontal = 0.dp),
             modifier = Modifier.fillMaxSize()
         ) { page ->
-            ImageBrowserItem(images[page], page, this)
+            ImagePageItem(images[page], page, this)
         }
-
+        /*** 指示器部分 */
         HorizontalPagerIndicator(
             pagerState = pageState,
             activeColor = Color.White,
@@ -55,35 +54,23 @@ fun ImageBrowserScreen(images: ArrayList<String>, currentIndex: Int) {
                 .align(Alignment.BottomCenter)
                 .padding(60.dp)
         )
-
-        LaunchedEffect(pageState) {
-            snapshotFlow { pageState.currentPage }.collect { page ->
-                println("ImageBrowserItem LaunchedEffect currentPage: $page")
-            }
-        }
     }
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ImageBrowserItem(image: String, page: Int = 0, pagerScope: PagerScope) {
-    /**
-     * 缩放比例
-     */
-    var scale by remember { mutableStateOf(1f) }
-
+fun ImagePageItem(
+    image: String,
+    page: Int = 0,
+    pagerScope: PagerScope
+) {
     val context = LocalContext.current as Activity
-
-    /**
-     * 偏移量
-     */
+    /*** 缩放比例 */
+    var scale by remember { mutableStateOf(1f) }
+    /*** 偏移量 */
     var offset  by remember { mutableStateOf(Offset.Zero) }
-
-    /**
-     * 监听手势状态变换
-     */
-    val state =
-        rememberTransformableState(onTransformation = { zoomChange, panChange, rotationChange ->
+    /*** 监听手势状态变换 */
+    val state = rememberTransformableState(onTransformation = { zoomChange, _, _ ->
             scale = (zoomChange * scale).coerceAtLeast(1f)
             scale = if (scale > 5f) {
                 5f
@@ -91,7 +78,6 @@ fun ImageBrowserItem(image: String, page: Int = 0, pagerScope: PagerScope) {
                 scale
             }
         })
-
     Surface(
         modifier = Modifier
             .fillMaxSize(),
@@ -101,11 +87,11 @@ fun ImageBrowserItem(image: String, page: Int = 0, pagerScope: PagerScope) {
             painter = rememberCoilPainter(
                 request = image
             ),
-            contentDescription = "",
+            contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .transformable(state = state)
-                .graphicsLayer{  //布局缩放、旋转、移动变换
+                .graphicsLayer{  /**布局缩放、旋转、移动变换 */
                     scaleX = scale
                     scaleY = scale
                     translationX = offset.x
