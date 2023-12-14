@@ -46,10 +46,10 @@ fun ImagePreviewScreen(images: ArrayList<String>, currentIndex: Int) {
         /*** 指示器部分 */
         HorizontalPagerIndicator(
             pagerState = pageState,
-            activeColor = Color.White,
-            inactiveColor = Color(0xff888888),
-            indicatorHeight = 6.dp,
-            indicatorWidth = 6.dp,
+            activeColor = Color.White,              /*** 指示器选中的颜色 */
+            inactiveColor = Color(0xff888888), /*** 指示器未选中的颜色 */
+            indicatorHeight = 6.dp,                  /*** 指示器的高度 */
+            indicatorWidth = 6.dp,                   /*** 指示器的宽度 */
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(60.dp)
@@ -69,18 +69,18 @@ fun ImagePageItem(
     var scale by remember { mutableStateOf(1f) }
     /*** 偏移量 */
     var offset  by remember { mutableStateOf(Offset.Zero) }
-    /*** 监听手势状态变换 */
-    val state = rememberTransformableState(onTransformation = { zoomChange, _, _ ->
-            scale = (zoomChange * scale).coerceAtLeast(1f)
-            scale = if (scale > 5f) {
-                5f
-            } else {
-                scale
-            }
-        })
+    /*** 监听手势变化 */
+    val state = rememberTransformableState(onTransformation = { zoomChange, offsetChange, rotationChange ->
+        scale = (zoomChange * scale).coerceAtLeast(1f)
+        scale = if (scale > 4f) {
+            4f
+        } else {
+            scale
+        }
+        offset += offsetChange
+    })
     Surface(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         color = Color.Black,
     ) {
         Image(
@@ -90,19 +90,19 @@ fun ImagePageItem(
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier
-                .transformable(state = state)
-                .graphicsLayer{  /**布局缩放、旋转、移动变换 */
-                    scaleX = scale
-                    scaleY = scale
-                    translationX = offset.x
-                    translationY = offset.y
+                .transformable(state = state)         /** 检测手势元素的平移、缩放、旋转 */
+                .graphicsLayer{  /**缩放、旋转、移动变换 */
+                    scaleX = scale                    /** 等比缩放 */
+                    scaleY = scale                    /** 等比缩放 */
+                    translationX = offset.x           /** X轴位移量*/
+                    translationY = offset.y           /** Y轴位移量*/
 
+                    /** 计算页面的当前偏移 */
                     val pageOffset = pagerScope.calculateCurrentOffsetForPage(page = page).absoluteValue
                     if (pageOffset == 1.0f) {
                         scale = 1.0f
                     }
-                }
-                .pointerInput(Unit) {
+                }.pointerInput(Unit) {
                     detectTapGestures(
                         onDoubleTap = {
                             scale = if (scale <= 1f) {
