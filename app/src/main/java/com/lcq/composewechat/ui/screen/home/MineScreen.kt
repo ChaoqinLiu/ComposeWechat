@@ -40,7 +40,6 @@ import com.lcq.composewechat.view.ActionTitle
 @Composable
 fun MineScreen(innerPadding: PaddingValues) {
     val context = LocalContext.current
-    rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
     val scrollState = rememberLazyListState()
     Surface {
         LazyColumn(

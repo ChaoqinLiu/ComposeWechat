@@ -36,7 +36,7 @@ data class MessageItem(
 /**
  * 首页标题
  */
-val titles = listOf("微信", "通讯录", "发现", "")
+val titles = listOf("", "通讯录", "发现", "")
 
 /**
  * 底部导航数据

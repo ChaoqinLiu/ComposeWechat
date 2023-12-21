@@ -27,7 +27,6 @@ import com.lcq.composewechat.activity.MomentActivity
 @Composable
 fun FindScreen(innerPadding: PaddingValues) {
     val context = LocalContext.current
-    rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
     val scrollState = rememberLazyListState()
     Surface {
         LazyColumn(

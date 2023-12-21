@@ -45,7 +45,6 @@ fun AddrBookScreen(innerPadding: PaddingValues) {
     val data = AddrBookUtils.getContactMap()
     val stickyHeaderState = rememberStickyHeaderState()
     stickyHeaderState.setData(data)
-    rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
     Box (
         contentAlignment = Alignment.TopEnd,
         modifier = Modifier.padding(innerPadding)

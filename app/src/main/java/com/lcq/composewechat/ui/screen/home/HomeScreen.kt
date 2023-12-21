@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,7 +41,13 @@ fun HomeScreen() {
     val pageState = rememberPagerState(initialPage = 0)
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    rememberSystemUiController().setStatusBarColor(Color.Transparent, darkIcons = true)
+
+    /** 状态栏 */
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setSystemBarsColor(
+        color = Color(0xffEDEDED),
+        darkIcons = true,
+    )
     Surface(
         Modifier
             .fillMaxSize()
@@ -48,53 +55,92 @@ fun HomeScreen() {
     ) {
         Scaffold(
             topBar = {
-                CenterAlignedTopAppBar(
-                    title = {
-                        Text(
-                            titles[selectIndex],
-                            maxLines = 1,
-                            fontSize = 16.sp,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    },
-                    actions = {
-                        if(selectIndex != 3) {
-                            IconButton(
-                                onClick = {
+                if (selectIndex != 0) {
+                    CenterAlignedTopAppBar(
+                        title = {
+                            Text(
+                                titles[selectIndex],
+                                maxLines = 1,
+                                fontSize = 16.sp,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        },
+                        actions = {
+                            if (selectIndex != 3) {
+                                IconButton(
+                                    onClick = {
+                                        /* doSomething() */
+                                    }) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Search,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(30.dp),
+                                        tint = Color(
+                                            ContextCompat.getColor(
+                                                context,
+                                                R.color.black_10
+                                            )
+                                        )
+                                    )
+                                }
+                                IconButton(onClick = {
                                     /* doSomething() */
                                 }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Search,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(30.dp),
-                                    tint = Color(ContextCompat.getColor(context, R.color.black_10))
-                                )
+                                    Icon(
+                                        imageVector = Icons.Filled.AddCircleOutline,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(25.dp),
+                                        tint = Color(
+                                            ContextCompat.getColor(
+                                                context,
+                                                R.color.black_10
+                                            )
+                                        )
+                                    )
+                                }
                             }
-                            IconButton(onClick = {
-                                /* doSomething() */
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Filled.AddCircleOutline,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(25.dp),
-                                    tint = Color(ContextCompat.getColor(context, R.color.black_10))
+                        },
+                        colors = TopAppBarDefaults.mediumTopAppBarColors(
+                            containerColor = Color(
+                                ContextCompat.getColor(
+                                    context,
+                                    if (selectIndex != 3) R.color.nav_bg else R.color.white
                                 )
-                            }
-                        }
-                    },
-                    colors = TopAppBarDefaults.mediumTopAppBarColors(
-                        containerColor = Color(ContextCompat.getColor(context, if (selectIndex != 3) R.color.nav_bg else R.color.white)),
-                        scrolledContainerColor = Color(ContextCompat.getColor(context, if (selectIndex != 3) R.color.nav_bg else R.color.white)),
-                        navigationIconContentColor = Color.White,
-                        titleContentColor = Color(ContextCompat.getColor(context, R.color.black_10)),
-                        actionIconContentColor = Color(ContextCompat.getColor(context, R.color.black_10)),
+                            ),
+                            scrolledContainerColor = Color(
+                                ContextCompat.getColor(
+                                    context,
+                                    if (selectIndex != 3) R.color.nav_bg else R.color.white
+                                )
+                            ),
+                            navigationIconContentColor = Color.White,
+                            titleContentColor = Color(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.black_10
+                                )
+                            ),
+                            actionIconContentColor = Color(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.black_10
+                                )
+                            ),
+                        )
                     )
-                )
+                } else {
+                    Spacer(modifier = Modifier.size(0.dp))
+                }
             },
             bottomBar = {
                 NavigationBar(
                     modifier = Modifier.height(60.dp),
-                    containerColor = Color(ContextCompat.getColor(context, if (selectIndex > 1) R.color.white else R.color.nav_bg)),
+                    containerColor = Color(
+                        ContextCompat.getColor(
+                            context,
+                            if (selectIndex > 1) R.color.white else R.color.nav_bg
+                        )
+                    ),
                 ) {
                     navList.forEachIndexed { index, nav ->
                         Box(
@@ -120,7 +166,10 @@ fun HomeScreen() {
                                     nav.icon, null,
                                     modifier = Modifier.size(28.dp),
                                     tint = Color(
-                                        if (selectIndex == index) ContextCompat.getColor(context, R.color.green)
+                                        if (selectIndex == index) ContextCompat.getColor(
+                                            context,
+                                            R.color.green
+                                        )
                                         else ContextCompat.getColor(context, R.color.gray)
                                     )
                                 )
@@ -128,7 +177,10 @@ fun HomeScreen() {
                                     text = nav.title,
                                     fontSize = 12.sp,
                                     color = Color(
-                                        if (selectIndex == index) ContextCompat.getColor(context, R.color.green)
+                                        if (selectIndex == index) ContextCompat.getColor(
+                                            context,
+                                            R.color.green
+                                        )
                                         else ContextCompat.getColor(context, R.color.gray)
                                     )
                                 )
@@ -145,7 +197,7 @@ fun HomeScreen() {
                         contentPadding = PaddingValues(horizontal = 0.dp),
                         modifier = Modifier.fillMaxSize()
                     ) { page ->
-                        when(page) {
+                        when (page) {
                             0 -> ChatSessionScreen(innerPadding)
                             1 -> AddrBookScreen(innerPadding)
                             2 -> FindScreen(innerPadding)
@@ -156,6 +208,11 @@ fun HomeScreen() {
                         snapshotFlow { pageState.currentPage }.collect { page ->
                             selectIndex = page
                             println("LaunchedEffect currentPage: $page")
+                            /** 动态设置状态栏颜色 */
+                            systemUiController.setSystemBarsColor(
+                                color = if (page != 3) Color(0xffEDEDED) else Color.White,
+                                darkIcons = true,
+                            )
                         }
                     }
                 }
