@@ -97,9 +97,9 @@ fun ChatSessionScreen(innerPadding: PaddingValues, viewModel: ChatSessionViewMod
             state = scrollState,
             modifier = Modifier.nestedScroll(connection = nestedScrollConnection)
         ) {
-            item {
-                PullHeaderMask(scrollState, offset, max)
-            }
+//            item {
+//                PullHeaderMask(scrollState, offset, max)
+//            }
             stickyHeader {
                 TopAppBar(context)
             }

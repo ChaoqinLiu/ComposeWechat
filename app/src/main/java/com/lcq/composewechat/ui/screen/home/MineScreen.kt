@@ -28,6 +28,7 @@ import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.CQDivider
 import com.lcq.composewechat.R
+import com.lcq.composewechat.activity.UserActivity
 import com.lcq.composewechat.data.ActionTitleItem
 import com.lcq.composewechat.data.myAvatar
 import com.lcq.composewechat.view.ActionTitle
@@ -97,7 +98,9 @@ fun MineScreen(innerPadding: PaddingValues) {
                     "设置",
                     R.mipmap.icon_set,
                 ), context, false,
-                    onClick = {})
+                    onClick = {
+                        UserActivity.navigate(context)
+                    })
             }
 
         }
