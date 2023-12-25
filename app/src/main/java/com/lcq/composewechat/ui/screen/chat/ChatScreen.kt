@@ -178,7 +178,6 @@ fun ChatScreen(viewModel: ChatViewModel = ChatViewModel(), session: ChatSession)
                                         fontSize = 14.sp
                                     ),
                                     modifier = Modifier
-                                        .padding(0.dp)
                                         .defaultMinSize(minHeight = 45.dp, minWidth = 280.dp)
                                         .focusRequester(focusRequester)
                                 )
