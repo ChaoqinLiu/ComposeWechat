@@ -16,7 +16,6 @@ import androidx.paging.compose.items
 import com.lcq.composewechat.CQDivider
 import com.lcq.composewechat.extensions.autoCloseKeyboard
 import com.lcq.composewechat.ui.screen.Loading
-import com.lcq.composewechat.ui.screen.montent.MomentItemView
 import com.lcq.composewechat.viewmodel.UserViewModel
 
 /**

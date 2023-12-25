@@ -14,7 +14,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
+import androidx.emoji2.emojipicker.EmojiPickerView
 import com.lcq.composewechat.CQDivider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -88,7 +90,9 @@ fun ModalBottomSheetDialog(
             ) {
                 titles.forEachIndexed { index, title ->
                     Box(
-                        modifier = Modifier.fillMaxWidth().height(45.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(45.dp)
                             .clickable {
                                 onSelect(index, title)
                                 coroutineScope.launch { modalBottomSheetState.hide() }
@@ -112,7 +116,9 @@ fun ModalBottomSheetDialog(
                         .background(Color(0xffF7F7F7))
                 )
                 Box(
-                    modifier = Modifier.fillMaxWidth().height(45.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(45.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -130,5 +136,38 @@ fun ModalBottomSheetDialog(
             }
         }
     ) {}
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun EmojiPicker(
+    modalBottomSheetState: ModalBottomSheetState,
+    onPicked: (emoji: String) -> Unit
+) {
+    ModalBottomSheetLayout(
+        sheetState = modalBottomSheetState,
+        sheetShape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp),
+        sheetContent = {
+            Column {
+                /** Spacer： 解决报错 java.lang.IllegalArgumentException:
+                 *  The initial value must have an associated anchor.
+                 */
+                Spacer(modifier = Modifier.height(1.dp))
+
+                Box(modifier = Modifier.fillMaxWidth().wrapContentHeight()) {
+                    AndroidView(
+                        factory = { context ->
+                            EmojiPickerView(context)
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) { it ->
+                        it.setOnEmojiPickedListener {
+                            onPicked(it.emoji)
+                        }
+                    }
+                }
+            }
+        }
+    ){}
 }
 

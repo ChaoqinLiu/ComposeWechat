@@ -9,17 +9,26 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -38,6 +47,8 @@ import com.lcq.composewechat.enums.MessageType
 import com.lcq.composewechat.models.ChatSession
 import com.lcq.composewechat.ui.screen.Loading
 import com.lcq.composewechat.extensions.autoCloseKeyboard
+import com.lcq.composewechat.extensions.click
+import com.lcq.composewechat.ui.screen.EmojiPicker
 import com.lcq.composewechat.viewmodel.ChatViewModel
 import github.leavesczy.compose_chat.base.utils.TimeUtils.toTalkTime
 import kotlinx.coroutines.delay
@@ -49,7 +60,9 @@ import kotlinx.coroutines.launch
  * Describe ：
  */
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class,
+    ExperimentalComposeUiApi::class
+)
 @Composable
 fun ChatScreen(viewModel: ChatViewModel = ChatViewModel(), session: ChatSession) {
     val context = LocalContext.current as Activity
@@ -60,6 +73,9 @@ fun ChatScreen(viewModel: ChatViewModel = ChatViewModel(), session: ChatSession)
     // 新的消息
     val messageState by viewModel.mMessageFlow.collectAsState()
     val scope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusRequester = remember { FocusRequester() }
 
     rememberSystemUiController().setStatusBarColor(Color(ContextCompat.getColor(context, R.color.nav_bg)), darkIcons = true)
     Surface(
@@ -135,7 +151,7 @@ fun ChatScreen(viewModel: ChatViewModel = ChatViewModel(), session: ChatSession)
                                 contentAlignment = Alignment.Center
                             ) {
                                 Icon(
-                                    imageVector = Icons.Filled.BlurCircular,
+                                    imageVector = Icons.Filled.PauseCircleOutline,
                                     contentDescription = null,
                                     modifier = Modifier.size(30.dp),
                                     tint = Color(0xff000000)
@@ -164,6 +180,7 @@ fun ChatScreen(viewModel: ChatViewModel = ChatViewModel(), session: ChatSession)
                                     modifier = Modifier
                                         .padding(0.dp)
                                         .defaultMinSize(minHeight = 45.dp, minWidth = 280.dp)
+                                        .focusRequester(focusRequester)
                                 )
                             }
                             if (inputText == "") {
@@ -174,9 +191,20 @@ fun ChatScreen(viewModel: ChatViewModel = ChatViewModel(), session: ChatSession)
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Icon(
-                                        imageVector = Icons.Filled.TagFaces,
+                                        imageVector = if (!sheetState.isVisible )Icons.Filled.TagFaces else Icons.Filled.BlurCircular,
                                         contentDescription = null,
-                                        modifier = Modifier.size(30.dp),
+                                        modifier = Modifier.size(30.dp).click {
+                                            focusRequester.requestFocus()
+                                            scope.launch {
+                                                if (!sheetState.isVisible) {
+                                                    keyboardController?.hide()
+                                                    sheetState.show()
+                                                } else {
+                                                    sheetState.hide()
+                                                    keyboardController?.show()
+                                                }
+                                            }
+                                        },
                                         tint = Color(0xff000000)
                                     )
                                 }
@@ -227,6 +255,7 @@ fun ChatScreen(viewModel: ChatViewModel = ChatViewModel(), session: ChatSession)
                                                         MessageType.RECEIVE
                                                     )
                                                     inputText = ""
+                                                    sheetState.hide()
                                                 }
                                             },
                                         textAlign = TextAlign.Center
@@ -269,6 +298,13 @@ fun ChatScreen(viewModel: ChatViewModel = ChatViewModel(), session: ChatSession)
                             }
                         }
                     }
+
+                    EmojiPicker(
+                        modalBottomSheetState = sheetState,
+                        onPicked = { emoji ->
+                            inputText += emoji
+                        }
+                    )
                 }
             }
         )
