@@ -244,9 +244,9 @@ fun ChatScreen(viewModel: ChatViewModel, session: ChatSession) {
                                                     inputText = ""
                                                     sheetState.hide()
                                                     /** 本人发送一条信息后保存一条对面回复模拟信息*/
-                                                    delay(1000)
+                                                    delay(200)
                                                     viewModel.sendMessage(
-                                                        inputText,
+                                                        "",
                                                         MessageType.RECEIVE
                                                     )
                                                 }

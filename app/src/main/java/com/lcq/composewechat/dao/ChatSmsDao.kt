@@ -40,6 +40,6 @@ interface ChatSmsDao {
     /**
      * 分页查询聊天记录
      */
-    @Query("SELECT * FROM chatsms WHERE userId =:userId ORDER BY createBy DESC")
+    @Query("SELECT * FROM chatsms WHERE userId =:userId ORDER BY id DESC")
     fun getAllByPagingSource(userId: Long): PagingSource<Int, ChatSmsEntity>
 }
