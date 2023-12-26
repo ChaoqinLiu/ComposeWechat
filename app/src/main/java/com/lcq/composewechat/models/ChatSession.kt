@@ -13,6 +13,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class ChatSession(
+    val userId: Long,
     val avatar: String,
     val name: String,
     val message: String,

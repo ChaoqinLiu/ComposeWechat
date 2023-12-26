@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
@@ -21,13 +20,11 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -43,6 +40,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lcq.composewechat.CQDivider
 import com.lcq.composewechat.R
 import com.lcq.composewechat.data.myAvatar
+import com.lcq.composewechat.entitys.ChatSmsEntity
 import com.lcq.composewechat.enums.MessageType
 import com.lcq.composewechat.models.ChatSession
 import com.lcq.composewechat.ui.screen.Loading
@@ -64,14 +62,12 @@ import kotlinx.coroutines.launch
     ExperimentalComposeUiApi::class
 )
 @Composable
-fun ChatScreen(viewModel: ChatViewModel = ChatViewModel(), session: ChatSession) {
+fun ChatScreen(viewModel: ChatViewModel, session: ChatSession) {
     val context = LocalContext.current as Activity
     val scrollState = rememberLazyListState()
     var inputText by remember { mutableStateOf("") }
-    // 历史消息
-    val lazyChatItems = viewModel.rankChatItems.collectAsLazyPagingItems()
-    // 新的消息
-    val messageState by viewModel.mMessageFlow.collectAsState()
+    /** 聊天消息 */
+    val lazyChatItems = viewModel.chatSmsItems.collectAsLazyPagingItems()
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -245,16 +241,14 @@ fun ChatScreen(viewModel: ChatViewModel = ChatViewModel(), session: ChatSession)
                                                 // 发送信息后滚动到最底部
                                                 scope.launch {
                                                     scrollState.scrollToItem(0)
-                                                    /**
-                                                     * 模拟收到的信息
-                                                     */
-                                                    delay(100)
+                                                    inputText = ""
+                                                    sheetState.hide()
+                                                    /** 本人发送一条信息后保存一条对面回复模拟信息*/
+                                                    delay(1000)
                                                     viewModel.sendMessage(
                                                         inputText,
                                                         MessageType.RECEIVE
                                                     )
-                                                    inputText = ""
-                                                    sheetState.hide()
                                                 }
                                             },
                                         textAlign = TextAlign.Center
@@ -279,16 +273,11 @@ fun ChatScreen(viewModel: ChatViewModel = ChatViewModel(), session: ChatSession)
                         reverseLayout = true,
                         verticalArrangement = Arrangement.Top,
                     ) {
-                        items(messageState) {
-                            MessageItemView(it, session)
-                        }
-
                         items(lazyChatItems) {
                             it?.let {
                                 MessageItemView(it, session)
                             }
                         }
-
                         lazyChatItems.apply {
                             when (loadState.append) {
                                 is LoadState.Loading -> {
@@ -297,7 +286,6 @@ fun ChatScreen(viewModel: ChatViewModel = ChatViewModel(), session: ChatSession)
                             }
                         }
                     }
-
                     EmojiPicker(
                         modalBottomSheetState = sheetState,
                         onPicked = { emoji ->
@@ -311,25 +299,23 @@ fun ChatScreen(viewModel: ChatViewModel = ChatViewModel(), session: ChatSession)
 }
 
 @Composable
-fun MessageItemView(it: ChatSession, session: ChatSession) {
+fun MessageItemView(it: ChatSmsEntity, session: ChatSession) {
     Box(
-        contentAlignment = if (it.messageType == MessageType.RECEIVE) Alignment.CenterStart else Alignment.CenterEnd,
+        contentAlignment = if (it.messageType == MessageType.RECEIVE.value) Alignment.CenterStart else Alignment.CenterEnd,
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(
                 top = 30.dp,
-                start = if (it.messageType == MessageType.RECEIVE) 0.dp else 40.dp,
-                end = if (it.messageType == MessageType.SEND) 0.dp else 40.dp
+                start = if (it.messageType == MessageType.RECEIVE.value) 0.dp else 40.dp,
+                end = if (it.messageType == MessageType.SEND.value) 0.dp else 40.dp
             ),
     ) {
         Column(modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
         ) {
-            /**
-             * 对话时间
-             */
+            /*** 对话时间*/
             Box(
                 modifier = Modifier.fillMaxWidth().padding(bottom = 20.dp),
                 contentAlignment = Alignment.Center
@@ -340,17 +326,13 @@ fun MessageItemView(it: ChatSession, session: ChatSession) {
                    color = Color(0xff888888)
                )
             }
-            /**
-             * 对话信息
-             */
+            /*** 对话信息*/
             Row(modifier = Modifier
                 .wrapContentWidth()
                 .wrapContentHeight()
             ) {
-                /**
-                 * 他人头像（左边）
-                 */
-                if(it.messageType == MessageType.RECEIVE) {
+                /*** 他人头像（左边）*/
+                if(it.messageType == MessageType.RECEIVE.value) {
                     Box(
                         modifier = Modifier
                             .size(40.dp)
@@ -373,42 +355,38 @@ fun MessageItemView(it: ChatSession, session: ChatSession) {
                         .weight(6f)
                         .wrapContentHeight(),
                     contentAlignment =
-                    if (it.messageType == MessageType.RECEIVE) Alignment.TopStart
+                    if (it.messageType == MessageType.RECEIVE.value) Alignment.TopStart
                     else Alignment.TopEnd
                 ) {
-                    /**
-                     * 尖角
-                     */
+                    /*** 尖角*/
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 10.dp),
-                        contentAlignment = if (it.messageType == MessageType.RECEIVE) Alignment.TopStart else Alignment.TopEnd
+                        contentAlignment = if (it.messageType == MessageType.RECEIVE.value) Alignment.TopStart else Alignment.TopEnd
                     ) {
                         Icon(
                             imageVector = Icons.Filled.PlayArrow,
                             contentDescription = null,
                             modifier = Modifier
                                 .size(20.dp)
-                                .rotate(if (it.messageType == MessageType.SEND) 0f else 180f),
-                            tint = if (it.messageType == MessageType.RECEIVE) Color.White
+                                .rotate(if (it.messageType == MessageType.SEND.value) 0f else 180f),
+                            tint = if (it.messageType == MessageType.RECEIVE.value) Color.White
                             else Color(0xffA9EA7A)
                         )
                     }
-                    /**
-                     * 文本内容
-                     */
+                    /*** 文本内容*/
                     Box(
                         modifier = Modifier
                             .padding(
-                                start = if (it.messageType == MessageType.RECEIVE) 12.dp else 0.dp,
-                                end = if (it.messageType == MessageType.RECEIVE) 0.dp else 12.dp,
+                                start = if (it.messageType == MessageType.RECEIVE.value) 12.dp else 0.dp,
+                                end = if (it.messageType == MessageType.RECEIVE.value) 0.dp else 12.dp,
                             )
                             .clip(RoundedCornerShape(4.dp))
                             .wrapContentWidth()
                             .wrapContentHeight(Alignment.CenterVertically)
                             .background(
-                                if (it.messageType == MessageType.RECEIVE) Color.White else Color(
+                                if (it.messageType == MessageType.RECEIVE.value) Color.White else Color(
                                     0xffA9EA7A
                                 )
                             ),
@@ -420,10 +398,8 @@ fun MessageItemView(it: ChatSession, session: ChatSession) {
                         )
                     }
                 }
-                /**
-                 * 本人头像（右边）
-                 */
-                if(it.messageType == MessageType.SEND) {
+                /*** 本人头像（右边）*/
+                if(it.messageType == MessageType.SEND.value) {
                     Box(
                         modifier = Modifier
                             .size(40.dp)
