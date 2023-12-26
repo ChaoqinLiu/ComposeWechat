@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
@@ -23,6 +24,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -159,23 +161,31 @@ fun ChatScreen(viewModel: ChatViewModel, session: ChatSession) {
                                     .fillMaxHeight()
                                     .weight(6f)
                             ) {
-                                OutlinedTextField(
+                                BasicTextField(
                                     value = inputText,
                                     onValueChange = {
                                         inputText = it
                                     },
-                                    shape = RoundedCornerShape(8.dp),
-                                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                                        containerColor = Color.White,
-                                        focusedBorderColor = Color.White,
-                                        unfocusedBorderColor = Color.White
-                                    ),
                                     textStyle = TextStyle(
-                                        fontSize = 14.sp
+                                        fontSize = 16.sp
                                     ),
                                     modifier = Modifier
                                         .defaultMinSize(minHeight = 45.dp, minWidth = 280.dp)
-                                        .focusRequester(focusRequester)
+                                        .focusRequester(focusRequester),
+                                    decorationBox = { innerTextField->
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .clip(RoundedCornerShape(4.dp))
+                                                .background(Color.White)
+                                                .padding(start = 6.dp),
+                                            contentAlignment = Alignment.CenterStart
+                                        ) {
+                                            innerTextField()
+                                        }
+                                    },
+                                    /** 光标颜色*/
+                                    cursorBrush = SolidColor(Color(0xff5ECC71))
                                 )
                             }
                             if (inputText == "") {
@@ -188,18 +198,20 @@ fun ChatScreen(viewModel: ChatViewModel, session: ChatSession) {
                                     Icon(
                                         imageVector = if (!sheetState.isVisible )Icons.Filled.TagFaces else Icons.Filled.BlurCircular,
                                         contentDescription = null,
-                                        modifier = Modifier.size(30.dp).click {
-                                            focusRequester.requestFocus()
-                                            scope.launch {
-                                                if (!sheetState.isVisible) {
-                                                    keyboardController?.hide()
-                                                    sheetState.show()
-                                                } else {
-                                                    sheetState.hide()
-                                                    keyboardController?.show()
+                                        modifier = Modifier
+                                            .size(30.dp)
+                                            .click {
+                                                focusRequester.requestFocus()
+                                                scope.launch {
+                                                    if (!sheetState.isVisible) {
+                                                        keyboardController?.hide()
+                                                        sheetState.show()
+                                                    } else {
+                                                        sheetState.hide()
+                                                        keyboardController?.show()
+                                                    }
                                                 }
-                                            }
-                                        },
+                                            },
                                         tint = Color(0xff000000)
                                     )
                                 }
@@ -317,7 +329,9 @@ fun MessageItemView(it: ChatSmsEntity, session: ChatSession) {
         ) {
             /*** 对话时间*/
             Box(
-                modifier = Modifier.fillMaxWidth().padding(bottom = 20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp),
                 contentAlignment = Alignment.Center
             ) {
                Text(
