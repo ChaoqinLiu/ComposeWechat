@@ -28,7 +28,9 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -67,7 +69,9 @@ import kotlinx.coroutines.launch
 fun ChatScreen(viewModel: ChatViewModel, session: ChatSession) {
     val context = LocalContext.current as Activity
     val scrollState = rememberLazyListState()
-    var inputText by remember { mutableStateOf("") }
+    /** 输入框使用TextFieldValue替换inputText，解决表情包赋值时光标没有在最后的问题*/
+    //var inputText by remember { mutableStateOf("") }
+    val textState = remember { mutableStateOf(TextFieldValue()) }
     /** 聊天消息 */
     val lazyChatItems = viewModel.chatSmsItems.collectAsLazyPagingItems()
     val scope = rememberCoroutineScope()
@@ -162,9 +166,9 @@ fun ChatScreen(viewModel: ChatViewModel, session: ChatSession) {
                                     .weight(6f)
                             ) {
                                 BasicTextField(
-                                    value = inputText,
+                                    value = textState.value,
                                     onValueChange = {
-                                        inputText = it
+                                        textState.value = it
                                     },
                                     textStyle = TextStyle(
                                         fontSize = 16.sp
@@ -188,7 +192,7 @@ fun ChatScreen(viewModel: ChatViewModel, session: ChatSession) {
                                     cursorBrush = SolidColor(Color(0xff5ECC71))
                                 )
                             }
-                            if (inputText == "") {
+                            if (textState.value.text.isEmpty()) {
                                 Box(
                                     modifier = Modifier
                                         .fillMaxHeight()
@@ -249,11 +253,12 @@ fun ChatScreen(viewModel: ChatViewModel, session: ChatSession) {
                                             .background(Color(0xff5ECC71))
                                             .padding(top = 4.dp)
                                             .clickable {
-                                                viewModel.sendMessage(inputText, MessageType.SEND)
-                                                // 发送信息后滚动到最底部
+                                                viewModel.sendMessage(textState.value.text, MessageType.SEND)
                                                 scope.launch {
+                                                    /** 发送信息后滚动到最底部*/
                                                     scrollState.scrollToItem(0)
-                                                    inputText = ""
+                                                    /** 清空输入框的值*/
+                                                    textState.value = TextFieldValue("")
                                                     sheetState.hide()
                                                     /** 本人发送一条信息后保存一条对面回复模拟信息*/
                                                     delay(200)
@@ -301,7 +306,9 @@ fun ChatScreen(viewModel: ChatViewModel, session: ChatSession) {
                     EmojiPicker(
                         modalBottomSheetState = sheetState,
                         onPicked = { emoji ->
-                            inputText += emoji
+                            val text = textState.value.text + emoji
+                            /** 输入表情包时将光标置于最后，不然一直在最前面*/
+                            textState.value = TextFieldValue(text, selection = TextRange(text.length -1))
                         }
                     )
                 }
