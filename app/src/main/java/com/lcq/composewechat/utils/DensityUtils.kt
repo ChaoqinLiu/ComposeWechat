@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
  */
 object DensityUtils {
 
-    fun pxToDp(px: Int, density: Float): Dp {
+    fun px2dp(px: Int, density: Float): Dp {
        return  (px / density).dp
     }
 }

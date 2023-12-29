@@ -1,6 +1,9 @@
 package com.lcq.composewechat.ui.screen.home
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -41,6 +44,7 @@ fun HomeScreen() {
     val pageState = rememberPagerState(initialPage = 0)
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    var visible by remember { mutableStateOf(true) }
 
     /** 状态栏 */
     val systemUiController = rememberSystemUiController()
@@ -133,57 +137,63 @@ fun HomeScreen() {
                 }
             },
             bottomBar = {
-                NavigationBar(
-                    modifier = Modifier.height(60.dp),
-                    containerColor = Color(
-                        ContextCompat.getColor(
-                            context,
-                            if (selectIndex > 1) R.color.white else R.color.nav_bg
-                        )
-                    ),
+                AnimatedVisibility(
+                    visible = visible,
+                    enter = fadeIn(),
+                    exit = fadeOut(),
                 ) {
-                    navList.forEachIndexed { index, nav ->
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxHeight()
-                                .click {
-                                    selectIndex = index
-                                    /**
-                                     * 点击底部的tab切换对应的page
-                                     */
-                                    scope.launch {
-                                        pageState.scrollToPage(index)
+                    NavigationBar(
+                        modifier = Modifier.height(60.dp),
+                        containerColor = Color(
+                            ContextCompat.getColor(
+                                context,
+                                if (selectIndex > 1) R.color.white else R.color.nav_bg
+                            )
+                        ),
+                    ) {
+                        navList.forEachIndexed { index, nav ->
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight()
+                                    .click {
+                                        selectIndex = index
+                                        /**
+                                         * 点击底部的tab切换对应的page
+                                         */
+                                        scope.launch {
+                                            pageState.scrollToPage(index)
+                                        }
                                     }
-                                }
-                        ) {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Bottom
                             ) {
-                                Icon(
-                                    nav.icon, null,
-                                    modifier = Modifier.size(28.dp),
-                                    tint = Color(
-                                        if (selectIndex == index) ContextCompat.getColor(
-                                            context,
-                                            R.color.green
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Bottom
+                                ) {
+                                    Icon(
+                                        nav.icon, null,
+                                        modifier = Modifier.size(28.dp),
+                                        tint = Color(
+                                            if (selectIndex == index) ContextCompat.getColor(
+                                                context,
+                                                R.color.green
+                                            )
+                                            else ContextCompat.getColor(context, R.color.gray)
                                         )
-                                        else ContextCompat.getColor(context, R.color.gray)
                                     )
-                                )
-                                Text(
-                                    text = nav.title,
-                                    fontSize = 12.sp,
-                                    color = Color(
-                                        if (selectIndex == index) ContextCompat.getColor(
-                                            context,
-                                            R.color.green
+                                    Text(
+                                        text = nav.title,
+                                        fontSize = 12.sp,
+                                        color = Color(
+                                            if (selectIndex == index) ContextCompat.getColor(
+                                                context,
+                                                R.color.green
+                                            )
+                                            else ContextCompat.getColor(context, R.color.gray)
                                         )
-                                        else ContextCompat.getColor(context, R.color.gray)
                                     )
-                                )
+                                }
                             }
                         }
                     }
@@ -195,10 +205,17 @@ fun HomeScreen() {
                         count = 4,
                         state = pageState,
                         contentPadding = PaddingValues(horizontal = 0.dp),
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
+                        userScrollEnabled = visible
                     ) { page ->
                         when (page) {
-                            0 -> ChatSessionScreen(innerPadding)
+                            0 -> ChatSessionScreen(innerPadding, onChangeVisible = { v ->
+                                visible = !v
+                                systemUiController.setSystemBarsColor(
+                                    color = if (visible) Color(0xffEDEDED) else Color(0xff1B1B2B),
+                                    darkIcons = true,
+                                )
+                            })
                             1 -> AddrBookScreen(innerPadding)
                             2 -> FindScreen(innerPadding)
                             3 -> MineScreen(innerPadding)
@@ -209,6 +226,7 @@ fun HomeScreen() {
                             selectIndex = page
                             println("LaunchedEffect currentPage: $page")
                             /** 动态设置状态栏颜色 */
+                            visible = true
                             systemUiController.setSystemBarsColor(
                                 color = if (page != 3) Color(0xffEDEDED) else Color.White,
                                 darkIcons = true,

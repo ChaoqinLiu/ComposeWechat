@@ -13,15 +13,4 @@ import kotlinx.coroutines.launch
  * 创建时间：2023/12/15
  * Describe ：
  */
-class ChatSessionViewModel: ViewModel() {
-
-    private val _offsetY = MutableStateFlow<Float>(0f)
-    val mOffsetY: StateFlow<Float> = _offsetY
-
-    suspend fun setOffsetY(offsetY: Float) {
-        viewModelScope.launch {
-            delay(20)
-            _offsetY.emit(offsetY)
-        }
-    }
-}
+class ChatSessionViewModel: ViewModel() {}

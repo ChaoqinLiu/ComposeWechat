@@ -37,7 +37,7 @@ data class MessageItem(
 /**
  * 首页标题
  */
-val titles = listOf("", "通讯录", "发现", "")
+val titles = listOf("微信", "通讯录", "发现", "")
 
 /**
  * 底部导航数据
@@ -187,5 +187,65 @@ val messageList = listOf(
         "好的～",
         "12:50",
         18
+    ),
+)
+
+/**
+ * 小程序入口
+ */
+data class MiniProgramItem(
+    /**
+     * 名称
+     */
+    val title: String,
+    /**
+     * 图标
+     */
+    val icon: String,
+)
+
+val miniProgramList = listOf(
+    MiniProgramItem(
+        "饿了么",
+        "https://img0.baidu.com/it/u=2625005847,2716895016&fm=253&fmt=auto&app=138&f=JPEG?w=200&h=200"
+    ),
+    MiniProgramItem(
+        "美图",
+        "https://img1.baidu.com/it/u=1752963805,4078506746&fm=253&fmt=auto&app=138&f=JPEG?w=200&h=200"
+    ),
+    MiniProgramItem(
+        "滴滴",
+        "https://img0.baidu.com/it/u=1068101613,1323308017&fm=253&fmt=auto&app=138&f=PNG?w=200&h=200"
+    ),
+    MiniProgramItem(
+        "青橘单车",
+        "https://img0.baidu.com/it/u=195120191,2939897897&fm=253&fmt=auto&app=138&f=PNG?w=190&h=190"
+    ),
+    MiniProgramItem(
+        "斗地主",
+        "https://img2.baidu.com/it/u=926635057,1451495262&fm=253&fmt=auto&app=138&f=PNG?w=190&h=190"
+    ),
+    MiniProgramItem(
+        "羊城通",
+        "https://img2.baidu.com/it/u=2751300851,4181594410&fm=253&fmt=auto&app=138&f=JPEG?w=200&h=200"
+    ),
+    MiniProgramItem(
+        "美图秀秀",
+        "https://img1.baidu.com/it/u=417359459,147216874&fm=253&fmt=auto&app=138&f=PNG?w=200&h=200"
+    ),
+    MiniProgramItem(
+        "拼多多",
+        "https://img2.baidu.com/it/u=620052409,134315960&fm=253&fmt=auto&app=138&f=PNG?w=190&h=190"
+    ),
+)
+
+val mineMiniProgramList = listOf(
+    MiniProgramItem(
+        "羊城通",
+        "https://img2.baidu.com/it/u=2751300851,4181594410&fm=253&fmt=auto&app=138&f=JPEG?w=200&h=200"
+    ),
+    MiniProgramItem(
+        "青橘单车",
+        "https://img0.baidu.com/it/u=195120191,2939897897&fm=253&fmt=auto&app=138&f=PNG?w=190&h=190"
     ),
 )
