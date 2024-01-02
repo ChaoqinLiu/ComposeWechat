@@ -213,7 +213,7 @@ fun MomentImageItemView(it: MomentItem, context: Context) {
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(end = 4.dp, bottom = 8.dp),
+                    .padding(end = 4.dp, bottom = 8.dp, top = 4.dp),
                 contentAlignment = Alignment.CenterEnd
             ) {
                 Box(

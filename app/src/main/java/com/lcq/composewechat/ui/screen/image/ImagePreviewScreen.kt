@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.pager.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.lcq.composewechat.extensions.detectCustomTransformGestures
 import kotlin.math.absoluteValue
 
 /**
@@ -90,14 +91,14 @@ fun ImagePageItem(
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier
-                .transformable(state = state)         /** 检测手势元素的平移、缩放、旋转 */
+                //.transformable(state = state)         /** 检测手势元素的平移、缩放、旋转 */
                 .graphicsLayer{  /**缩放、旋转、移动变换 */
                     scaleX = scale                    /** 等比缩放 */
                     scaleY = scale                    /** 等比缩放 */
                     translationX = offset.x           /** X轴位移量*/
                     translationY = offset.y           /** Y轴位移量*/
 
-                    /** 计算页面的当前偏移 */
+                    /** 页面切换时需要恢复scale */
                     val pageOffset = pagerScope.calculateCurrentOffsetForPage(page = page).absoluteValue
                     if (pageOffset == 1.0f) {
                         scale = 1.0f
@@ -114,6 +115,24 @@ fun ImagePageItem(
                         },
                         onTap = {
                             context.finish()
+                        }
+                    )
+                }.pointerInput(Unit) {
+                    detectCustomTransformGestures(
+                        consume = false,
+                        onGesture = { _, pan, gestureZoom, _, _, changes ->
+                            scale = (gestureZoom * scale).coerceAtLeast(1f)
+                            scale = if (scale > 4f) {
+                                4f
+                            } else {
+                                scale
+                            }
+                            offset += pan
+                            // If more than 1 pointer is down consume event
+                            // to prevent Pager from scrolling
+                            if (changes.size > 1) {
+                                changes.forEach { it.consume() }
+                            }
                         }
                     )
                 }
