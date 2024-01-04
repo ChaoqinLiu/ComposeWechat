@@ -74,9 +74,10 @@ fun ChatSessionScreen(innerPadding: PaddingValues, viewModel: ChatSessionViewMod
     var scrollPercent by remember { mutableFloatStateOf(0f) }
     /** 中间圆的大小*/
     var ballSize by remember { mutableFloatStateOf(0f) }
+    /** 出现小程序页面的滚动高度*/
     val target = fullHeight / 4
     val backgroundColor = Color(0xffEDEDED)
-
+    /** 左右两个小圆点的X轴偏移量*/
     var offsetX by remember { mutableStateOf(0f) }
 
     Box(
